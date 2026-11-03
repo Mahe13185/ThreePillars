@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three Pillars Daily Tracker – DSA Spaced Repetition</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="header-titles">
+          <h1 class="app-title">Three Pillars Daily Tracker</h1>
+          <p class="app-subtitle">DSA Spaced Repetition & Daily Habit System</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="today-badge" id="header-today-badge">
+          <span id="current-date-display">Today</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary btn-sm" id="btn-open-backup" title="Backup or Restore Data">
+            Backup / Restore
+          </button>
+          <button class="btn btn-primary btn-sm" id="btn-add-problem-top">
+            + Add Problem
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <nav class="main-nav">
+      <button class="nav-tab active" data-tab="dashboard">
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-tab" data-tab="dsa">
+        <span>DSA Tracker</span>
+      </button>
+      <button class="nav-tab" data-tab="queue">
+        <span>Revision Queue</span>
+        <span class="nav-badge" id="nav-queue-badge" style="display: none;">0</span>
+      </button>
+      <button class="nav-tab" data-tab="pillars">
+        <span>Three Pillars</span>
+        <span class="nav-indicator" id="nav-pillars-indicator"></span>
+      </button>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      
+      <!-- ================= SECTION 1: DASHBOARD ================= -->
+      <section id="section-dashboard" class="content-section active">
+        <!-- Pillars Quick Status for Today -->
+        <div class="dashboard-pillars-strip card">
+          <div class="pillars-strip-header">
+            <div>
+              <h2 class="card-title">Today's Three Pillars Progress</h2>
+              <p class="card-desc">Daily consistency across your core engineering disciplines</p>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="btn-jump-to-pillars">Go to Checklist →</button>
+          </div>
+          <div class="pillars-quick-grid">
+            <div class="pillar-quick-card" id="dash-pillar-dsa">
+              <div class="pillar-quick-left">
+                <input type="checkbox" id="dash-check-dsa" class="custom-checkbox">
+                <div>
+                  <span class="pillar-tag dsa-tag">Pillar 1</span>
+                  <h4 class="pillar-quick-name">DSA – Striver A2Z</h4>
+                </div>
+              </div>
+              <span class="pillar-status-pill" id="dash-status-dsa">Pending</span>
+            </div>
+
+            <div class="pillar-quick-card" id="dash-pillar-java">
+              <div class="pillar-quick-left">
+                <input type="checkbox" id="dash-check-java" class="custom-checkbox">
+                <div>
+                  <span class="pillar-tag java-tag">Pillar 2</span>
+                  <h4 class="pillar-quick-name">Java / Spring Boot</h4>
+                </div>
+              </div>
+              <span class="pillar-status-pill" id="dash-status-java">Pending</span>
+            </div>
+
+            <div class="pillar-quick-card" id="dash-pillar-sw360">
+              <div class="pillar-quick-left">
+                <input type="checkbox" id="dash-check-sw360" class="custom-checkbox">
+                <div>
+                  <span class="pillar-tag oss-tag">Pillar 3</span>
+                  <h4 class="pillar-quick-name">Open Source – SW360</h4>
+                </div>
+              </div>
+              <span class="pillar-status-pill" id="dash-status-sw360">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Problems Solved</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-total-solved">0</span>
+              <span class="metric-sub">Striver A2Z</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-due">
+            <span class="metric-label">Revisions Due Today</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-due-today">0</span>
+              <span class="metric-sub" id="stat-due-sub">Spaced Recall</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-overdue">
+            <span class="metric-label">Overdue Revisions</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-overdue">0</span>
+              <span class="metric-sub">Need attention</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-mastered">
+            <span class="metric-label">Well Retained</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-well-retained">0</span>
+              <span class="metric-sub">Passed 5 Revisions</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Revision Focus -->
+        <div class="card revision-focus-card">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Today's Revision Focus</h3>
+              <p class="card-desc">Active recall problems scheduled for today or needing immediate catch-up</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-dash-open-queue">Full Queue →</button>
+          </div>
+          <div id="dash-focus-list" class="focus-list-container">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- GitHub-Style DSA Contribution Calendar -->
+        <div class="card contribution-calendar-card">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">DSA Contribution Calendar</h3>
+              <p class="card-desc">12-month problem solving activity and consistency heatmap</p>
+            </div>
+            <span class="badge badge-neutral" id="heatmap-total-solved-period">0 problems solved in the last year</span>
+          </div>
+
+          <div class="heatmap-scroll-container">
+            <div class="heatmap-container">
+              <!-- Month labels header row -->
+              <div class="heatmap-header-row">
+                <div class="heatmap-weekday-spacer"></div>
+                <div class="heatmap-months-strip" id="heatmap-months-strip">
+                  <!-- Populated via JS: Month labels aligned to week columns -->
+                </div>
+              </div>
+
+              <!-- Main heatmap body: Weekday labels on left + 53-week Grid -->
+              <div class="heatmap-body">
+                <div class="heatmap-weekdays" aria-hidden="true">
+                  <span></span>
+                  <span>Mon</span>
+                  <span></span>
+                  <span>Wed</span>
+                  <span></span>
+                  <span>Fri</span>
+                  <span></span>
+                </div>
+                <div class="heatmap-grid" id="heatmap-grid" role="grid" aria-label="DSA Contribution Heatmap">
+                  <!-- Populated via JS: 53 columns x 7 rows of cells -->
+                </div>
+              </div>
+
+              <!-- Legend footer -->
+              <div class="heatmap-footer">
+                <div class="heatmap-legend-wrap">
+                  <span class="heatmap-legend-label">Less</span>
+                  <div class="heatmap-legend-scale" aria-label="Color intensity legend">
+                    <span class="heatmap-legend-cell level-0" title="0 problems"></span>
+                    <span class="heatmap-legend-cell level-1" title="1 problem"></span>
+                    <span class="heatmap-legend-cell level-2" title="2–3 problems"></span>
+                    <span class="heatmap-legend-cell level-3" title="4–5 problems"></span>
+                    <span class="heatmap-legend-cell level-4" title="6+ problems"></span>
+                  </div>
+                  <span class="heatmap-legend-label">More</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Day details panel (shown on day click) -->
+          <div class="heatmap-day-details" id="heatmap-day-details" style="display: none;">
+            <!-- Populated via JS when a day is clicked -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECTION 2: DSA TRACKER ================= -->
+      <section id="section-dsa" class="content-section">
+        <div class="tracker-header card">
+          <div class="tracker-toolbar">
+            <div class="search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="dsa-search-input" class="form-control" placeholder="Search problems by name, pattern, or notes...">
+              <button class="btn-clear-search" id="btn-clear-dsa-search" title="Clear search">✕</button>
+            </div>
+
+            <div class="filter-controls">
+              <select id="dsa-filter-topic" class="form-select">
+                <option value="ALL">All Topics</option>
+                <!-- Populated dynamically / preset list -->
+              </select>
+
+              <select id="dsa-filter-difficulty" class="form-select">
+                <option value="ALL">All Difficulties</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+
+              <select id="dsa-sort-by" class="form-select">
+                <option value="solved-desc">Solved Date: Newest First</option>
+                <option value="solved-asc">Solved Date: Oldest First</option>
+                <option value="next-rev-asc">Next Revision: Soonest</option>
+                <option value="title-asc">Problem Name: A to Z</option>
+                <option value="difficulty-desc">Difficulty: Hard to Easy</option>
+              </select>
+
+              <button class="btn btn-primary" id="btn-add-problem-main">
+                + Add Problem
+              </button>
+            </div>
+          </div>
+
+          <div class="tracker-meta-bar">
+            <div class="tracker-meta-left">
+              <span class="meta-count" id="dsa-table-count">Showing 0 problems</span>
+              <span class="meta-dot">•</span>
+              <span class="meta-tag" id="dsa-filter-summary">No filters applied</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="btn-reset-filters">Reset Filters</button>
+          </div>
+        </div>
+
+        <!-- Problems Table Container -->
+        <div class="table-container card">
+          <table class="data-table" id="dsa-problems-table">
+            <thead>
+              <tr>
+                <th style="min-width: 200px;">Problem</th>
+                <th style="width: 130px;">Topic</th>
+                <th style="width: 90px;">Difficulty</th>
+                <th style="min-width: 140px;">Approach</th>
+                <th style="width: 110px;">Solved Date</th>
+                <th style="width: 140px;">Next Revision</th>
+                <th style="width: 120px;">Status</th>
+                <th style="width: 130px; text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="dsa-table-body">
+              <!-- Dynamically populated via script.js -->
+            </tbody>
+          </table>
+          <div id="dsa-table-empty" class="table-empty-state" style="display: none;">
+            <h4 class="empty-title">No problems found</h4>
+            <p class="empty-desc">Add your first problem from Striver's A2Z Sheet or adjust your search filters.</p>
+            <button class="btn btn-primary btn-sm" id="btn-add-problem-empty">+ Add Problem</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SECTION 3: REVISION QUEUE ================= -->
+      <section id="section-queue" class="content-section">
+        <!-- Prominent Queue Summary Header -->
+        <div class="queue-summary-banner card">
+          <div class="queue-banner-left">
+            <div class="queue-stat-pill due-stat">
+              <span class="queue-stat-num" id="queue-banner-due-count">0</span>
+              <span class="queue-stat-title">Due Today</span>
+            </div>
+            <div class="queue-stat-pill overdue-stat">
+              <span class="queue-stat-num" id="queue-banner-overdue-count">0</span>
+              <span class="queue-stat-title">Overdue</span>
+            </div>
+            <div class="queue-stat-pill upcoming-stat">
+              <span class="queue-stat-num" id="queue-banner-upcoming-count">0</span>
+              <span class="queue-stat-title">Next 7 Days</span>
+            </div>
+          </div>
+          <div class="queue-banner-right">
+            <p class="queue-banner-note">
+              <strong>Spaced Repetition Intervals:</strong><br>
+              R1 (1d) → R2 (3d) → R3 (7d) → R4 (14d) → R5 (30d) → Well Retained
+            </p>
+          </div>
+        </div>
+
+        <!-- Queue Sub-Tabs -->
+        <div class="queue-nav-tabs">
+          <button class="sub-tab active" data-queue-group="due">
+            Due Today
+            <span class="sub-badge" id="badge-due-count">0</span>
+          </button>
+          <button class="sub-tab" data-queue-group="overdue">
+            Overdue
+            <span class="sub-badge overdue-badge" id="badge-overdue-count">0</span>
+          </button>
+          <button class="sub-tab" data-queue-group="upcoming">
+            Upcoming (Next 7 Days)
+            <span class="sub-badge neutral-badge" id="badge-upcoming-count">0</span>
+          </button>
+        </div>
+
+        <!-- Queue Cards List -->
+        <div class="queue-cards-grid" id="queue-cards-container">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <div id="queue-empty-state" class="table-empty-state card" style="display: none;">
+          <h4 class="empty-title">All Caught Up</h4>
+          <p class="empty-desc">No problems currently scheduled in this queue.</p>
+        </div>
+      </section>
+
+      <!-- ================= SECTION 4: THREE PILLARS ================= -->
+      <section id="section-pillars" class="content-section">
+        <!-- Date Selector Navigation Bar -->
+        <div class="pillars-date-bar card">
+          <div class="date-bar-left">
+            <button class="btn btn-secondary btn-icon" id="btn-pillar-prev-day" title="Previous Day">‹</button>
+            <button class="btn btn-secondary btn-sm" id="btn-pillar-today">Today</button>
+            <button class="btn btn-secondary btn-icon" id="btn-pillar-next-day" title="Next Day">›</button>
+            <span class="date-bar-display" id="pillar-selected-date-text">Monday, Nov 3, 2026</span>
+          </div>
+          <div class="date-bar-right">
+            <span class="today-focus-tag" id="pillar-today-focus-tag">Schedule: DSA + Spring Boot</span>
+          </div>
+        </div>
+
+        <div class="pillars-layout-grid">
+          <!-- Daily Checklist Column -->
+          <div class="pillars-left-col">
+            <div class="card pillar-checklist-card">
+              <div class="card-header-flex">
+                <div>
+                  <h3 class="card-title">Daily Execution Checklist</h3>
+                  <p class="card-desc">Check off completed pillars and track details for the selected day</p>
+                </div>
+                <span class="badge" id="pillars-day-completion-badge">0 / 3 Done</span>
+              </div>
+
+              <div class="pillars-items-list">
+                <!-- Pillar 1: DSA -->
+                <div class="pillar-item-box" id="pitem-dsa">
+                  <div class="pitem-top">
+                    <label class="custom-checkbox-label">
+                      <input type="checkbox" id="chk-pillar-dsa" class="custom-checkbox lg-check">
+                      <span class="pitem-title">Pillar 1: DSA – Striver A2Z</span>
+                    </label>
+                    <span class="pillar-tag dsa-tag">DSA Sheet</span>
+                  </div>
+                  <div class="pitem-content">
+                    <input type="text" id="input-pillar-dsa-task" class="form-control form-control-sm" placeholder="e.g. Completed Sliding Window 3 problems">
+                  </div>
+                </div>
+
+                <!-- Pillar 2: Java / Spring Boot -->
+                <div class="pillar-item-box" id="pitem-java">
+                  <div class="pitem-top">
+                    <label class="custom-checkbox-label">
+                      <input type="checkbox" id="chk-pillar-java" class="custom-checkbox lg-check">
+                      <span class="pitem-title">Pillar 2: Java / Spring Boot</span>
+                    </label>
+                    <span class="pillar-tag java-tag">Mosh Course</span>
+                  </div>
+                  <div class="pitem-content">
+                    <input type="text" id="input-pillar-java-task" class="form-control form-control-sm" placeholder="e.g. Mosh Section 4 - Dependency Injection & Services">
+                  </div>
+                </div>
+
+                <!-- Pillar 3: Open Source – SW360 -->
+                <div class="pillar-item-box" id="pitem-sw360">
+                  <div class="pitem-top">
+                    <label class="custom-checkbox-label">
+                      <input type="checkbox" id="chk-pillar-sw360" class="custom-checkbox lg-check">
+                      <span class="pitem-title">Pillar 3: Open Source – SW360</span>
+                    </label>
+                    <span class="pillar-tag oss-tag">Eclipse SW360</span>
+                  </div>
+                  <div class="pitem-content">
+                    <input type="text" id="input-pillar-sw360-task" class="form-control form-control-sm" placeholder="e.g. Explored backend REST controllers, issue #241 setup">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Daily Reflection Notes -->
+            <div class="card pillar-reflection-card">
+              <h3 class="card-title">Daily Reflection & Key Learnings</h3>
+              <p class="card-desc">Write your quick daily recap, roadblocks, or notes (auto-saved)</p>
+              <textarea id="pillar-daily-reflection" class="form-control" rows="4" placeholder="What went well today? What did you struggle with? Any specific algorithmic concept or Spring Boot annotation learned?"></textarea>
+              <div class="reflection-footer">
+                <span class="save-status-text" id="reflection-save-status">Saved</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Schedule Reference Column -->
+          <div class="pillars-right-col">
+            <div class="card weekly-schedule-card">
+              <div class="card-header-flex">
+                <div>
+                  <h3 class="card-title">Weekly Schedule Cadence</h3>
+                  <p class="card-desc">Fixed weekly distribution of the Three Pillars</p>
+                </div>
+              </div>
+
+              <div class="schedule-days-list" id="weekly-schedule-list">
+                <div class="schedule-day-row" data-day="1">
+                  <span class="day-name">Monday</span>
+                  <div class="day-pillars">
+                    <span class="badge dsa-badge-sm">DSA</span>
+                    <span class="badge java-badge-sm">Spring Boot</span>
+                  </div>
+                </div>
+                <div class="schedule-day-row" data-day="2">
+                  <span class="day-name">Tuesday</span>
+                  <div class="day-pillars">
+                    <span class="badge dsa-badge-sm">DSA</span>
+                    <span class="badge oss-badge-sm">SW360</span>
+                  </div>
+                </div>
+                <div class="schedule-day-row" data-day="3">
+                  <span class="day-name">Wednesday</span>
+                  <div class="day-pillars">
+                    <span class="badge dsa-badge-sm">DSA</span>
+                    <span class="badge java-badge-sm">Spring Boot</span>
+                  </div>
+                </div>
+                <div class="schedule-day-row" data-day="4">
+                  <span class="day-name">Thursday</span>
+                  <div class="day-pillars">
+                    <span class="badge dsa-badge-sm">DSA</span>
+                    <span class="badge oss-badge-sm">SW360</span>
+                  </div>
+                </div>
+                <div class="schedule-day-row" data-day="5">
+                  <span class="day-name">Friday</span>
+                  <div class="day-pillars">
+                    <span class="badge dsa-badge-sm">DSA</span>
+                    <span class="badge java-badge-sm">Spring Boot</span>
+                  </div>
+                </div>
+                <div class="schedule-day-row" data-day="6">
+                  <span class="day-name">Saturday</span>
+                  <div class="day-pillars">
+                    <span class="badge dsa-badge-sm">DSA Rev / Test</span>
+                    <span class="badge oss-badge-sm">SW360</span>
+                  </div>
+                </div>
+                <div class="schedule-day-row" data-day="0">
+                  <span class="day-name">Sunday</span>
+                  <div class="day-pillars">
+                    <span class="badge neutral-badge-sm">Weekly Revision</span>
+                    <span class="badge neutral-badge-sm">Rest & Planning</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. ADD / EDIT PROBLEM MODAL -->
+  <div class="modal-backdrop" id="modal-problem" style="display: none;">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-problem-title">Add DSA Problem</h3>
+        <button class="btn-close-modal" id="btn-close-problem-modal">✕</button>
+      </div>
+      <form id="form-problem" class="modal-body">
+        <input type="hidden" id="input-prob-id">
+
+        <div class="form-row form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="input-prob-name">Problem Name <span class="required">*</span></label>
+            <input type="text" id="input-prob-name" class="form-control" placeholder="e.g. 3Sum, Subarray Sum Equals K" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-prob-topic">Topic <span class="required">*</span></label>
+            <select id="input-prob-topic" class="form-select" required>
+              <option value="">Select Topic</option>
+              <option value="Arrays">Arrays</option>
+              <option value="Strings">Strings</option>
+              <option value="Binary Search">Binary Search</option>
+              <option value="Two Pointers">Two Pointers</option>
+              <option value="Sliding Window">Sliding Window</option>
+              <option value="Recursion">Recursion</option>
+              <option value="Linked List">Linked List</option>
+              <option value="Bit Manipulation">Bit Manipulation</option>
+              <option value="Stack & Queue">Stack & Queue</option>
+              <option value="Trees">Trees</option>
+              <option value="Binary Search Trees">Binary Search Trees</option>
+              <option value="Graphs">Graphs</option>
+              <option value="Dynamic Programming">Dynamic Programming</option>
+              <option value="Greedy">Greedy</option>
+              <option value="Heaps / Priority Queue">Heaps / Priority Queue</option>
+              <option value="Backtracking">Backtracking</option>
+              <option value="Tries">Tries</option>
+              <option value="Maths">Maths</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row form-row-3">
+          <div class="form-group">
+            <label class="form-label" for="input-prob-difficulty">Difficulty <span class="required">*</span></label>
+            <select id="input-prob-difficulty" class="form-select" required>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-prob-platform">Platform</label>
+            <select id="input-prob-platform" class="form-select">
+              <option value="LeetCode">LeetCode</option>
+              <option value="GeeksforGeeks">GeeksforGeeks</option>
+              <option value="CodeStudio">CodeStudio / Coding Ninjas</option>
+              <option value="CodeChef">CodeChef</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="input-prob-date">Date Solved <span class="required">*</span></label>
+            <input type="date" id="input-prob-date" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-prob-url">Problem URL (Optional)</label>
+          <input type="url" id="input-prob-url" class="form-control" placeholder="https://leetcode.com/problems/...">
+        </div>
+
+        <!-- Multiple Approaches Section -->
+        <div class="form-section-divider">
+          <div class="section-divider-title">
+            <span>Approaches & Complexities</span>
+            <small>Record multiple approaches (e.g. Brute, Better, Optimal) without duplicate records</small>
+          </div>
+        </div>
+
+        <div id="approaches-container" class="approaches-list">
+          <!-- Dynamically populated approach rows -->
+        </div>
+
+        <button type="button" class="btn btn-secondary btn-sm" id="btn-add-approach-row">
+          + Add Another Approach
+        </button>
+
+        <div class="form-group" style="margin-top: 16px;">
+          <label class="form-label" for="input-prob-notes">Personal Notes & Key Insights (Optional)</label>
+          <textarea id="input-prob-notes" class="form-control" rows="3" placeholder="Edge cases, tricky base condition, or intuition behind the optimal trick..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="btn-cancel-problem">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-problem">Save Problem</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. REVISE NOW / FLASHCARD ACTIVE RECALL MODAL -->
+  <div class="modal-backdrop" id="modal-revise" style="display: none;">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <div>
+          <div class="modal-pretitle">Active Recall Spaced Repetition</div>
+          <h3 class="modal-title" id="modal-revise-title">Problem Title</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-revise-modal">✕</button>
+      </div>
+
+      <div class="modal-body revise-modal-body">
+        <input type="hidden" id="revise-problem-id">
+
+        <!-- Top metadata tags -->
+        <div class="revise-meta-strip">
+          <span class="badge" id="revise-topic-badge">Topic</span>
+          <span class="badge" id="revise-diff-badge">Medium</span>
+          <span class="badge badge-neutral" id="revise-stage-badge">Revision 1</span>
+          <span class="badge badge-neutral" id="revise-platform-badge">LeetCode</span>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-external" id="revise-link">Open Problem ↗</a>
+        </div>
+
+        <!-- Problem prompt / question box -->
+        <div class="recall-prompt-card">
+          <div class="recall-prompt-header">
+            <div>
+              <h4 class="recall-prompt-heading">Active Recall Challenge</h4>
+              <p class="recall-prompt-sub">Try to solve or reconstruct the approach, edge cases, and time/space complexity before revealing the saved approaches.</p>
+            </div>
+          </div>
+
+          <div class="recall-notes-box" id="revise-personal-notes-box" style="display: none;">
+            <span class="notes-caption">Initial Notes & Clues:</span>
+            <p id="revise-personal-notes-text"></p>
+          </div>
+        </div>
+
+        <!-- Hidden approach reveal toggle -->
+        <div class="reveal-toggle-area" id="revise-reveal-area">
+          <button type="button" class="btn btn-secondary btn-lg" id="btn-reveal-solution">
+            Reveal Saved Approaches & Complexities
+          </button>
+        </div>
+
+        <!-- Revealed Solution Section -->
+        <div id="revise-solution-section" class="revealed-solution-container" style="display: none;">
+          <h4 class="revealed-heading">Saved Approaches</h4>
+          <div id="revise-approaches-list" class="revealed-approaches-grid">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Outcome Rating Section -->
+          <div class="recall-rating-box">
+            <h4 class="rating-prompt-title">How well did you recall this problem?</h4>
+            <p class="rating-prompt-sub">Select your recall quality to calculate the next spaced revision date:</p>
+
+            <div class="outcome-buttons-grid">
+              <!-- AGAIN -->
+              <button type="button" class="btn-outcome outcome-again" data-outcome="Again">
+                <span class="outcome-name">AGAIN</span>
+                <span class="outcome-desc">Could not remember idea</span>
+                <span class="outcome-next" id="outcome-next-again">Tomorrow (+1d)</span>
+              </button>
+
+              <!-- HARD -->
+              <button type="button" class="btn-outcome outcome-hard" data-outcome="Hard">
+                <span class="outcome-name">HARD</span>
+                <span class="outcome-desc">Needed hints or struggled</span>
+                <span class="outcome-next" id="outcome-next-hard">In 2 days (+2d)</span>
+              </button>
+
+              <!-- GOOD -->
+              <button type="button" class="btn-outcome outcome-good" data-outcome="Good">
+                <span class="outcome-name">GOOD</span>
+                <span class="outcome-desc">Solved independently</span>
+                <span class="outcome-next" id="outcome-next-good">Next interval</span>
+              </button>
+
+              <!-- EASY -->
+              <button type="button" class="btn-outcome outcome-easy" data-outcome="Easy">
+                <span class="outcome-name">EASY</span>
+                <span class="outcome-desc">Solved easily & explained O(N)</span>
+                <span class="outcome-next" id="outcome-next-easy">Next interval</span>
+              </button>
+            </div>
+
+            <!-- Optional Revision Note -->
+            <div class="form-group" style="margin-top: 16px;">
+              <label class="form-label" for="revise-log-note">Revision Note (Optional):</label>
+              <input type="text" id="revise-log-note" class="form-control" placeholder="e.g. Forgot the two pointer condition when nums[i] == nums[i-1]">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. VIEW PROBLEM DETAILS & REVISION HISTORY MODAL -->
+  <div class="modal-backdrop" id="modal-details" style="display: none;">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <div>
+          <div class="modal-pretitle" id="details-topic-pretitle">DSA Problem</div>
+          <h3 class="modal-title" id="details-problem-title">Problem Details</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-details-modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="details-top-grid">
+          <div class="details-field">
+            <span class="details-label">Topic</span>
+            <span class="details-value" id="details-topic">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Difficulty</span>
+            <span class="details-value" id="details-difficulty">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Platform</span>
+            <span class="details-value" id="details-platform">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Date Solved</span>
+            <span class="details-value" id="details-solved-date">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Current Status</span>
+            <span class="details-value" id="details-status">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Next Scheduled Revision</span>
+            <span class="details-value" id="details-next-rev">-</span>
+          </div>
+        </div>
+
+        <div class="details-link-wrap" id="details-link-wrap">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-external" id="details-url-link">Open Problem Link ↗</a>
+        </div>
+
+        <!-- Recorded Approaches -->
+        <div class="details-section">
+          <h4 class="details-heading">Approaches & Complexities</h4>
+          <div id="details-approaches-container" class="details-approaches-list">
+            <!-- Approaches list -->
+          </div>
+        </div>
+
+        <!-- Personal Notes -->
+        <div class="details-section" id="details-notes-section">
+          <h4 class="details-heading">Personal Notes</h4>
+          <div class="details-notes-content" id="details-personal-notes">-</div>
+        </div>
+
+        <!-- Complete Revision History -->
+        <div class="details-section">
+          <div class="card-header-flex">
+            <h4 class="details-heading">Revision History</h4>
+            <span class="badge badge-neutral" id="details-history-count">0 Revisions</span>
+          </div>
+          <div class="table-container history-table-wrap">
+            <table class="data-table" id="details-history-table">
+              <thead>
+                <tr>
+                  <th style="width: 110px;">Date</th>
+                  <th style="width: 80px;">Rev #</th>
+                  <th style="width: 100px;">Result</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="details-history-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-details-edit">Edit Problem</button>
+        <button type="button" class="btn btn-primary" id="btn-details-revise-now">Revise Now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. BACKUP & RESTORE MODAL -->
+  <div class="modal-backdrop" id="modal-backup" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Backup & Restore</h3>
+        <button class="btn-close-modal" id="btn-close-backup-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-lead">All your problem records, approaches, revision history, and Three Pillars logs are securely stored in your browser's LocalStorage.</p>
+
+        <div class="backup-actions-grid">
+          <div class="backup-action-box">
+            <h4>Export Backup (JSON)</h4>
+            <p>Download a complete JSON backup file containing all your data.</p>
+            <button type="button" class="btn btn-primary" id="btn-export-json">
+              📥 Download Backup JSON
+            </button>
+          </div>
+
+          <div class="backup-action-box">
+            <h4>Restore from Backup (JSON)</h4>
+            <p>Import a previously saved JSON backup file.</p>
+            <input type="file" id="input-import-file" accept=".json" style="display: none;">
+            <button type="button" class="btn btn-secondary" id="btn-trigger-import">
+              📤 Choose JSON File
+            </button>
+          </div>
+
+          <div class="backup-action-box">
+            <h4>Import CSV (Notion / Sheet)</h4>
+            <p>Import problems from Kaizen / Notion / Excel CSV format.</p>
+            <input type="file" id="input-import-csv" accept=".csv" style="display: none;">
+            <button type="button" class="btn btn-secondary" id="btn-trigger-import-csv">
+              📑 Choose CSV File
+            </button>
+          </div>
+
+          <div class="backup-action-box">
+            <h4>Seed Striver A2Z Sample</h4>
+            <p>Load 4 starter problems from Striver's A2Z sheet to explore the system.</p>
+            <button type="button" class="btn btn-ghost btn-sm" id="btn-seed-sample">
+              ✨ Load Starter Problems
+            </button>
+          </div>
+        </div>
+
+        <div id="backup-status-message" class="backup-status-message" style="display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="btn-close-backup-done">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. DELETE CONFIRMATION MODAL -->
+  <div class="modal-backdrop" id="modal-delete" style="display: none;">
+    <div class="modal-dialog modal-dialog-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Problem</h3>
+        <button class="btn-close-modal" id="btn-close-delete-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-problem-name">this problem</strong>?</p>
+        <p class="text-muted" style="font-size: 0.85rem; margin-top: 6px;">This will remove the problem record and its complete revision history.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-delete">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete">Delete Problem</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
