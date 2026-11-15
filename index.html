@@ -61,7 +61,7 @@
       
       <!-- ================= SECTION 1: DASHBOARD ================= -->
       <section id="section-dashboard" class="content-section active">
-        <!-- Pillars Quick Status for Today -->
+        <!-- 1. Today's Three Pillars Progress -->
         <div class="dashboard-pillars-strip card">
           <div class="pillars-strip-header">
             <div>
@@ -106,16 +106,35 @@
           </div>
         </div>
 
-        <!-- Pillar 1 Metrics Section Header -->
-        <div class="dash-section-header">
-          <div class="dash-section-title-wrap">
-            <span class="pillar-tag dsa-tag">Pillar 1</span>
-            <h3 class="dash-section-title">DSA – Striver A2Z Spaced Repetition</h3>
+        <!-- 2. Today's Revision Focus (DSA-first) -->
+        <div class="card revision-focus-card primary-focus-card">
+          <div class="card-header-flex">
+            <div>
+              <div class="focus-title-wrap">
+                <h3 class="card-title">Today's Revision Focus</h3>
+                <span class="badge badge-primary-subtle" id="dash-focus-count-badge" style="display: none;">0 items</span>
+              </div>
+              <p class="card-desc">Active recall problems scheduled for today or needing immediate catch-up</p>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-dash-open-queue">View All Queue →</button>
+          </div>
+          <div id="dash-focus-list" class="focus-list-container">
+            <!-- Populated via JS -->
           </div>
         </div>
 
-        <!-- Metrics Grid -->
-        <div class="metrics-grid">
+        <!-- 3. DSA Overview -->
+        <div class="dash-section-header">
+          <div class="dash-section-title-wrap">
+            <span class="pillar-tag dsa-tag">Pillar 1</span>
+            <h3 class="dash-section-title">DSA Overview</h3>
+            <span class="dash-section-subtitle">Striver A2Z Spaced Repetition</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="btn-dash-open-dsa">Open DSA Tracker →</button>
+        </div>
+
+        <!-- DSA Metrics Grid (4 compact, consistently sized cards) -->
+        <div class="metrics-grid dsa-metrics-grid">
           <div class="metric-card">
             <span class="metric-label">Total Problems Solved</span>
             <div class="metric-value-wrap">
@@ -149,37 +168,26 @@
           </div>
         </div>
 
-        <!-- Pillar 2: Course Progress & Concepts Metrics -->
-        <div class="dash-section-header" style="margin-top: 20px;">
+        <!-- 4. Java / Spring Boot Overview -->
+        <div class="dash-section-header">
           <div class="dash-section-title-wrap">
             <span class="pillar-tag java-tag">Pillar 2</span>
-            <h3 class="dash-section-title">EmbarkX Java / Spring Boot Course</h3>
+            <h3 class="dash-section-title">Java / Spring Boot Overview</h3>
+            <span class="dash-section-subtitle">EmbarkX 72-Day Plan</span>
           </div>
           <button class="btn btn-secondary btn-sm" id="btn-dash-open-course">Open Course Tracker →</button>
         </div>
 
+        <!-- Java / Spring Boot Metrics Grid (4 compact, consistently sized cards) -->
         <div class="metrics-grid course-metrics-grid">
           <div class="metric-card">
             <span class="metric-label">Course Lessons</span>
             <div class="metric-value-wrap">
-              <span class="metric-value" id="stat-course-total">50</span>
-              <span class="metric-sub">10 Phases (72 Days)</span>
-            </div>
-          </div>
-
-          <div class="metric-card highlight-success">
-            <span class="metric-label">Lessons Completed</span>
-            <div class="metric-value-wrap">
               <span class="metric-value" id="stat-course-completed">0</span>
-              <span class="metric-sub" id="stat-course-rate">0% Done</span>
+              <span class="metric-sub" style="font-size: 0.95rem; font-weight: 500; color: var(--text-muted);">/ <span id="stat-course-total">50</span></span>
             </div>
-          </div>
-
-          <div class="metric-card">
-            <span class="metric-label">Lessons Pending</span>
-            <div class="metric-value-wrap">
-              <span class="metric-value" id="stat-course-pending">50</span>
-              <span class="metric-sub">Remaining</span>
+            <div class="metric-sub" style="margin-top: 4px;">
+              <span id="stat-course-rate">0% Done</span> <span class="metric-sub-dot">•</span> <span id="stat-course-pending">50</span> pending
             </div>
           </div>
 
@@ -208,37 +216,7 @@
           </div>
         </div>
 
-        <!-- Today's Revision Focus -->
-        <div class="card revision-focus-card">
-          <div class="card-header-flex">
-            <div>
-              <h3 class="card-title">Today's Revision Focus</h3>
-              <p class="card-desc">Active recall problems scheduled for today or needing immediate catch-up</p>
-            </div>
-            <button class="btn btn-secondary btn-sm" id="btn-dash-open-queue">Full Queue →</button>
-          </div>
-          <div id="dash-focus-list" class="focus-list-container">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-
-        <!-- Course Progress: Phase-wise Completion Percentages -->
-        <div class="card course-progress-card">
-          <div class="card-header-flex">
-            <div>
-              <h3 class="card-title">Course Progress by Phase</h3>
-              <p class="card-desc">Phase-wise completion percentages across the 10 EmbarkX phases</p>
-            </div>
-            <div class="phase-progress-summary-pill">
-              <span id="dash-phase-progress-summary">0 / 50 Lessons Completed (0%)</span>
-            </div>
-          </div>
-          <div class="phase-progress-grid" id="dash-course-phase-progress">
-            <!-- Populated via script.js -->
-          </div>
-        </div>
-
-        <!-- GitHub-Style DSA Contribution Calendar -->
+        <!-- 5. Remaining Existing Dashboard Sections: GitHub-Style DSA Contribution Calendar -->
         <div class="card contribution-calendar-card">
           <div class="card-header-flex">
             <div>

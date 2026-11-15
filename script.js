@@ -1177,66 +1177,68 @@ function renderDashboard() {
   if (statCourseOverdue) statCourseOverdue.textContent = courseQueue.overdue.length;
   if (statCourseRetained) statCourseRetained.textContent = courseWellRetained;
 
-  // 4. Course Progress View: Phase-wise Completion
+  // 4. Course Progress View (Maintained in Course Tracker section)
   const phaseProgressSummary = document.getElementById('dash-phase-progress-summary');
   if (phaseProgressSummary) {
     phaseProgressSummary.textContent = `${completedLessons} / ${totalCourseLessons} Lessons Completed (${coursePct}%)`;
   }
 
-  const phaseProgressGrid = document.getElementById('dash-course-phase-progress');
-  if (phaseProgressGrid) {
-    phaseProgressGrid.innerHTML = '';
-    EMBARKX_COURSE_TEMPLATE.forEach(phase => {
-      const pLessons = AppState.courseLessons.filter(l => l.phaseId === phase.phaseId);
-      const pTotal = pLessons.length;
-      const pDone = pLessons.filter(l => l.completed).length;
-      const pPct = pTotal > 0 ? Math.round((pDone / pTotal) * 100) : 0;
-      const isComplete = pDone === pTotal && pTotal > 0;
-
-      const item = document.createElement('div');
-      item.className = 'phase-progress-item';
-      item.setAttribute('data-phase-id', phase.phaseId);
-      item.title = `Click to view Phase ${phase.phaseId} in Course Tracker`;
-      item.innerHTML = `
-        <div class="phase-progress-top">
-          <span class="phase-progress-title">Phase ${phase.phaseId}: ${escapeHtml(phase.phaseTitle.replace(/^PHASE \d+:\s*/i, '').replace(/\s*\([^)]*\)$/, ''))}</span>
-          <span class="phase-progress-pct ${isComplete ? 'complete' : ''}">${pPct}%</span>
-        </div>
-        <div class="phase-progress-sub">
-          <span>${phase.dayRange || ''}</span>
-          <span>•</span>
-          <span>${pDone}/${pTotal} lessons</span>
-        </div>
-        <div class="progress-bar-outer">
-          <div class="progress-bar-inner ${isComplete ? 'success' : ''}" style="width: ${pPct}%;"></div>
-        </div>
-      `;
-      phaseProgressGrid.appendChild(item);
-    });
-  }
-
-  // 5. Today's Revision Focus (Combined DSA & Course Concepts)
+  // 5. Today's Revision Focus (DSA-first priority ordering)
   const focusContainer = document.getElementById('dash-focus-list');
   if (focusContainer) {
     focusContainer.innerHTML = '';
 
-    // Unified focus items: Overdue first, then Due today
+    // Update revision count badge on dashboard header
+    const focusBadge = document.getElementById('dash-focus-count-badge');
+    if (focusBadge) {
+      if (dsaOverdue.length > 0) {
+        focusBadge.style.display = 'inline-flex';
+        focusBadge.className = 'badge status-overdue';
+        focusBadge.textContent = `${dsaOverdue.length} Overdue`;
+      } else if (dsaDue.length > 0) {
+        focusBadge.style.display = 'inline-flex';
+        focusBadge.className = 'badge status-due';
+        focusBadge.textContent = `${dsaDue.length} Due Today`;
+      } else if (courseQueue.overdue.length > 0) {
+        focusBadge.style.display = 'inline-flex';
+        focusBadge.className = 'badge status-overdue';
+        focusBadge.textContent = `${courseQueue.overdue.length} Overdue`;
+      } else if (courseQueue.due.length > 0) {
+        focusBadge.style.display = 'inline-flex';
+        focusBadge.className = 'badge status-due';
+        focusBadge.textContent = `${courseQueue.due.length} Due Today`;
+      } else {
+        focusBadge.style.display = 'none';
+      }
+    }
+
+    // DSA-first priority ordering:
+    // 1. Overdue DSA revisions first
+    // 2. Followed by DSA revisions due today
+    // 3. Course concept revisions (overdue, then due)
     const focusItems = [];
     dsaOverdue.forEach(prob => focusItems.push({ type: 'dsa', isOverdue: true, item: prob }));
-    courseQueue.overdue.forEach(lesson => focusItems.push({ type: 'course', isOverdue: true, item: lesson }));
     dsaDue.forEach(prob => focusItems.push({ type: 'dsa', isOverdue: false, item: prob }));
+    courseQueue.overdue.forEach(lesson => focusItems.push({ type: 'course', isOverdue: true, item: lesson }));
     courseQueue.due.forEach(lesson => focusItems.push({ type: 'course', isOverdue: false, item: lesson }));
 
     if (focusItems.length === 0) {
       focusContainer.innerHTML = `
-        <div style="padding: 20px 12px; text-align: center; color: var(--text-muted);">
-          <p style="font-weight: 500;">No revisions due today</p>
-          <p style="font-size: 0.78rem; color: var(--text-light); margin-top: 2px;">All DSA and Course concept spaced recalls are up to date.</p>
+        <div class="focus-empty-state">
+          <div class="focus-empty-left">
+            <span class="focus-empty-icon">✓</span>
+            <div>
+              <div class="focus-empty-title">All caught up on revisions!</div>
+              <div class="focus-empty-desc">No DSA problems or course concepts are scheduled for revision today.</div>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btn-empty-go-dsa">Solve Problems →</button>
         </div>
       `;
+      document.getElementById('btn-empty-go-dsa')?.addEventListener('click', () => switchTab('dsa'));
     } else {
-      // Display up to 6 priority items
-      focusItems.slice(0, 6).forEach(fObj => {
+      // Display up to 5 priority items
+      focusItems.slice(0, 5).forEach(fObj => {
         const row = document.createElement('div');
         row.className = 'focus-problem-row';
 
@@ -1244,23 +1246,23 @@ function renderDashboard() {
           const prob = fObj.item;
           row.innerHTML = `
             <div class="focus-problem-left">
-              <div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <span class="pillar-tag dsa-tag" style="font-size: 0.7rem; padding: 1px 6px;">DSA</span>
-                  <span class="focus-problem-name">${escapeHtml(prob.title)}</span>
+              <div class="focus-problem-title-group">
+                <div class="focus-name-wrap">
+                  <span class="pillar-tag dsa-tag">DSA</span>
+                  <span class="focus-problem-name" title="${escapeHtml(prob.title)}">${escapeHtml(prob.title)}</span>
                 </div>
-                <div class="focus-problem-meta" style="margin-top: 3px;">
+                <div class="focus-problem-meta">
                   <span class="badge ${getDifficultyBadgeClass(prob.difficulty)}">${prob.difficulty}</span>
                   <span>${escapeHtml(prob.topic)}</span>
-                  <span>•</span>
+                  <span class="focus-meta-sep">•</span>
                   <span class="badge ${fObj.isOverdue ? 'status-overdue' : 'status-due'}">
                     ${fObj.isOverdue ? 'Overdue' : 'Due Today'}
                   </span>
-                  <span>Stage: R${prob.stage || 1}</span>
+                  <span class="badge badge-stage">Stage: R${prob.stage || 1}</span>
                 </div>
               </div>
             </div>
-            <div>
+            <div class="focus-problem-action">
               <button class="btn btn-primary btn-sm btn-dash-revise" data-id="${prob.id}">
                 Revise Now →
               </button>
@@ -1270,23 +1272,23 @@ function renderDashboard() {
           const lesson = fObj.item;
           row.innerHTML = `
             <div class="focus-problem-left">
-              <div>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <span class="pillar-tag java-tag" style="font-size: 0.7rem; padding: 1px 6px;">Spring Boot</span>
-                  <span class="focus-problem-name">${escapeHtml(lesson.title)}</span>
+              <div class="focus-problem-title-group">
+                <div class="focus-name-wrap">
+                  <span class="pillar-tag java-tag">Spring Boot</span>
+                  <span class="focus-problem-name" title="${escapeHtml(lesson.title)}">${escapeHtml(lesson.title)}</span>
                 </div>
-                <div class="focus-problem-meta" style="margin-top: 3px;">
+                <div class="focus-problem-meta">
                   <span class="badge badge-neutral">Phase ${lesson.phaseNumber || 1}</span>
                   <span>${escapeHtml(lesson.dayRange || '')}</span>
-                  <span>•</span>
+                  <span class="focus-meta-sep">•</span>
                   <span class="badge ${fObj.isOverdue ? 'status-overdue' : 'status-due'}">
                     ${fObj.isOverdue ? 'Overdue' : 'Due Today'}
                   </span>
-                  <span>Stage: R${lesson.stage || 1}</span>
+                  <span class="badge badge-stage">Stage: R${lesson.stage || 1}</span>
                 </div>
               </div>
             </div>
-            <div>
+            <div class="focus-problem-action">
               <button class="btn btn-primary btn-sm btn-dash-concept-revise" data-id="${lesson.id}">
                 Revise Concept →
               </button>
@@ -1296,13 +1298,13 @@ function renderDashboard() {
         focusContainer.appendChild(row);
       });
 
-      if (focusItems.length > 6) {
+      if (focusItems.length > 5) {
         const moreDiv = document.createElement('div');
         moreDiv.style.textAlign = 'center';
-        moreDiv.style.paddingTop = '8px';
+        moreDiv.style.paddingTop = '6px';
         moreDiv.innerHTML = `
           <button class="btn btn-ghost btn-sm" id="btn-dash-more-revisions">
-            + ${focusItems.length - 6} more in Revision Queue
+            + ${focusItems.length - 5} more in Revision Queue →
           </button>
         `;
         focusContainer.appendChild(moreDiv);
@@ -3325,6 +3327,7 @@ function setupEventListeners() {
   // Dashboard quick triggers
   document.getElementById('btn-jump-to-pillars')?.addEventListener('click', () => switchTab('pillars'));
   document.getElementById('btn-dash-open-queue')?.addEventListener('click', () => switchTab('queue'));
+  document.getElementById('btn-dash-open-dsa')?.addEventListener('click', () => switchTab('dsa'));
   document.getElementById('btn-dash-open-course')?.addEventListener('click', () => switchTab('course'));
   document.getElementById('btn-pillar-open-course')?.addEventListener('click', () => switchTab('course'));
 

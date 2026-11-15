@@ -450,9 +450,9 @@ textarea.form-control {
 }
 
 .status-due {
-  background-color: var(--warning-subtle);
-  color: var(--warning-text);
-  border: 1px solid var(--warning-border);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
 }
 
 .status-overdue {
@@ -488,17 +488,18 @@ textarea.form-control {
 .pillars-quick-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
 }
 
 .pillar-quick-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
+  padding: 11px 14px;
   background-color: var(--bg-subtle);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .pillar-quick-card.completed {
@@ -509,7 +510,7 @@ textarea.form-control {
 .pillar-quick-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .pillar-quick-name {
@@ -528,12 +529,156 @@ textarea.form-control {
   color: var(--success-text);
 }
 
-/* Metrics Grid */
+/* Primary Hero: Today's Revision Focus */
+.primary-focus-card {
+  border-top: 3px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 24px;
+}
+
+.focus-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.focus-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.focus-problem-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  gap: 12px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.focus-problem-row:hover {
+  background-color: var(--bg-hover);
+  border-color: #cbd5e1;
+}
+
+.focus-problem-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.focus-problem-title-group {
+  min-width: 0;
+  flex: 1;
+}
+
+.focus-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.focus-problem-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.focus-problem-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+
+.focus-meta-sep {
+  color: var(--border-dark);
+}
+
+.focus-problem-action {
+  flex-shrink: 0;
+}
+
+.focus-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px;
+  background-color: var(--bg-subtle);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  gap: 12px;
+}
+
+.focus-empty-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.focus-empty-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--success-subtle);
+  color: var(--success-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.focus-empty-title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.focus-empty-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.badge-stage {
+  background-color: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.badge-primary-subtle {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+}
+
+.badge-danger-subtle {
+  background-color: var(--danger-subtle);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-border);
+}
+
+/* Metrics Grid (DSA & Java Overviews) */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 24px;
 }
 
 .metric-card {
@@ -541,6 +686,12 @@ textarea.form-control {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 12px 14px;
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.15s ease;
 }
 
 .metric-label {
@@ -548,7 +699,7 @@ textarea.form-control {
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
 }
 
 .metric-value-wrap {
@@ -559,7 +710,7 @@ textarea.form-control {
 }
 
 .metric-value {
-  font-size: 1.6rem;
+  font-size: 1.55rem;
   font-weight: 700;
   line-height: 1;
   color: var(--text-main);
@@ -571,49 +722,14 @@ textarea.form-control {
   color: var(--text-muted);
 }
 
-.metric-card.highlight-due { border-left: 3px solid var(--warning); }
+.metric-sub-dot {
+  color: var(--border-dark);
+  margin: 0 2px;
+}
+
+.metric-card.highlight-due { border-left: 3px solid var(--primary); }
 .metric-card.highlight-overdue { border-left: 3px solid var(--danger); }
 .metric-card.highlight-mastered { border-left: 3px solid var(--success); }
-
-/* Revision Focus List */
-.focus-list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.focus-problem-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: var(--bg-subtle);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  gap: 8px;
-}
-
-.focus-problem-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-}
-
-.focus-problem-name {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-.focus-problem-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
 
 /* ==========================================================================
    GitHub-Style DSA Contribution Heatmap
@@ -1866,7 +1982,9 @@ textarea.form-control {
 
 @media (max-width: 640px) {
   .app-container { padding: 12px 10px; }
-  .metrics-grid { grid-template-columns: 1fr; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .focus-problem-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .focus-problem-action { width: 100%; display: flex; justify-content: flex-end; }
   .heatmap-footer { justify-content: flex-start; }
   .form-row-2, .form-row-3 { grid-template-columns: 1fr; }
   .filter-controls { flex-direction: column; align-items: stretch; width: 100%; }
@@ -1891,6 +2009,7 @@ textarea.form-control {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .dash-section-title {
@@ -1900,9 +2019,16 @@ textarea.form-control {
   letter-spacing: -0.2px;
 }
 
+.dash-section-subtitle {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
 .course-metrics-grid {
-  grid-template-columns: repeat(6, 1fr);
-  margin-bottom: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 24px;
 }
 
 .highlight-success {
@@ -2388,13 +2514,13 @@ textarea.form-control {
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
-  .course-metrics-grid { grid-template-columns: repeat(3, 1fr); }
+  .course-metrics-grid { grid-template-columns: repeat(2, 1fr); }
   .course-overview-grid { grid-template-columns: repeat(3, 1fr); }
   .lesson-cell-actions { width: auto; }
 }
 
 @media (max-width: 640px) {
-  .course-metrics-grid { grid-template-columns: 1fr; }
+  .course-metrics-grid { grid-template-columns: repeat(2, 1fr); }
   .course-overview-grid { grid-template-columns: repeat(2, 1fr); }
   .phase-header-btn { flex-direction: column; align-items: flex-start; }
   .phase-header-right { width: 100%; justify-content: space-between; }
