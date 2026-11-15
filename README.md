@@ -14,10 +14,11 @@ Instead of managing multiple productivity tools, ThreePillars brings your daily 
 - Maintain a revision queue.
 - Review your daily and long-term progress.
 
-### 2. Java & Spring Boot
-- Track Java learning progress.
-- Monitor Spring Boot development activities.
-- Maintain consistency in backend development.
+### 2. Java & Spring Boot (EmbarkX Full Stack Masterclass)
+- Track progress across all 10 phases and 50 lessons of the EmbarkX 72-Day Study Plan.
+- Independent lesson completion tracking and hands-on practical coding verification.
+- Dedicated spaced repetition concept revision engine (R1: 1d → R2: 3d → R3: 7d → Well Retained).
+- Personal lesson reflections and timestamped revision history.
 
 ### 3. Open Source Contributions
 - Track open-source learning and contribution activities.
@@ -26,13 +27,14 @@ Instead of managing multiple productivity tools, ThreePillars brings your daily 
 
 ## ✨ Features
 
-- 📊 **Dashboard:** Get an overview of your daily progress.
-- 💻 **DSA Tracker:** Manage and track solved problems.
-- 🔄 **Revision Queue:** Keep track of problems that need revision.
-- 🎯 **Three Pillars Checklist:** Monitor daily consistency across all three pillars.
-- 📅 **Activity Calendar:** Visualize your coding consistency.
-- 💾 **Local Data Storage:** Keep your personal progress stored locally.
-- 🌐 **Offline-first:** Use your tracker without depending on a backend.
+- 📊 **Dashboard:** Integrated overview of daily consistency, Pillar 1 DSA metrics, and Pillar 2 Course Progress with phase-wise completion.
+- 💻 **DSA Tracker:** Manage and track solved problems with multi-approach complexities.
+- ☕ **EmbarkX Course Tracker:** Complete 72-day study plan across 10 expandable phases with practical coding tracking and lesson notes.
+- 🔄 **Unified Revision Queue:** Categorized active recall queues for DSA Problems (R1–R5) and Java / Spring Boot Concepts (R1–R3 → Well Retained).
+- 🎯 **Three Pillars Checklist:** Monitor daily consistency across all three disciplines.
+- 📅 **Activity Calendar:** GitHub-style 12-month consistency heatmap.
+- 💾 **Local Data Storage:** Safe LocalStorage persistence, backup & restore (JSON/CSV) without external backend dependencies.
+- 🌐 **Offline-first:** Distraction-free, zero authentication, runs directly in your browser.
 
 ## 🛠️ Tech Stack
 

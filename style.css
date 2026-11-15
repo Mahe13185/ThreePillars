@@ -1873,3 +1873,531 @@ textarea.form-control {
   .filter-controls .form-select, .filter-controls .btn { width: 100%; }
   .outcome-buttons-grid { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   EmbarkX Course Tracker & Concept Revision System Styles
+   ========================================================================== */
+
+.dash-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dash-section-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.2px;
+}
+
+.course-metrics-grid {
+  grid-template-columns: repeat(6, 1fr);
+  margin-bottom: 16px;
+}
+
+.highlight-success {
+  border-color: var(--success-border);
+  background-color: var(--success-subtle);
+}
+
+.highlight-info {
+  border-color: var(--info-border);
+  background-color: var(--info-subtle);
+}
+
+/* Course Progress Card & Phase Grid */
+.course-progress-card {
+  margin-bottom: 18px;
+}
+
+.phase-progress-summary-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.phase-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.phase-progress-item {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.phase-progress-item:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--primary-border);
+}
+
+.phase-progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.phase-progress-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.phase-progress-pct {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.phase-progress-pct.complete {
+  color: var(--success);
+}
+
+.phase-progress-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.progress-bar-outer {
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.progress-bar-inner {
+  background-color: var(--primary);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar-inner.success {
+  background-color: var(--success);
+}
+
+/* Queue Category Bar */
+.queue-category-bar {
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.queue-category-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.queue-category-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+.category-pill-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.category-pill-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.category-pill-btn.active {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.category-pill-btn .pill-count {
+  font-size: 0.72rem;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.category-pill-btn.active .pill-count {
+  background: #ffffff;
+  border-color: var(--primary-border);
+  color: var(--primary);
+}
+
+.queue-stat-pill.retained-stat {
+  border-left-color: var(--success);
+}
+
+.retained-badge {
+  background-color: var(--success-subtle);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
+}
+
+/* Course Overview Banner Card */
+.course-overview-card {
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+.course-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.course-stat-box {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.course-stat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+  display: block;
+}
+
+.course-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.course-stat-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.course-progress-bar-wrap {
+  margin-top: 6px;
+}
+
+.course-progress-bar-wrap .progress-bar-outer {
+  height: 8px;
+}
+
+/* Course Header Actions */
+.course-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* 10 Phases Accordion */
+.course-phases-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phase-accordion-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.phase-header-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background-color: var(--bg-surface);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 12px;
+  transition: background-color 0.15s ease;
+}
+
+.phase-header-btn:hover {
+  background-color: var(--bg-subtle);
+}
+
+.phase-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.phase-chevron {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  width: 14px;
+  text-align: center;
+}
+
+.phase-accordion-card.open .phase-chevron {
+  transform: rotate(90deg);
+}
+
+.phase-title-text {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.phase-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.phase-progress-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 90px;
+}
+
+.phase-progress-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.phase-progress-mini-bar {
+  width: 80px;
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.phase-accordion-body {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+}
+
+.phase-accordion-card:not(.open) .phase-accordion-body {
+  display: none;
+}
+
+.phase-meta-banner {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.phase-meta-banner-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.phase-outcome-text {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.phase-skills-text {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Lessons Table & Rows */
+.course-lessons-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lesson-row {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.15s ease;
+}
+
+.lesson-row:last-child {
+  border-bottom: none;
+}
+
+.lesson-row:hover {
+  background-color: var(--bg-subtle);
+}
+
+.lesson-row.completed {
+  background-color: #fcfdfc;
+}
+
+.lesson-cell-check {
+  width: 38px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 8px 4px 8px 6px;
+}
+
+.lesson-cell-main {
+  vertical-align: middle;
+  padding: 8px 8px;
+}
+
+.lesson-title-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lesson-title-text {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.lesson-row.completed .lesson-title-text {
+  color: var(--text-muted);
+}
+
+.lesson-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.lesson-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.lesson-cell-actions {
+  width: 220px;
+  text-align: right;
+  vertical-align: middle;
+  padding: 8px 10px;
+}
+
+.lesson-actions-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+}
+
+.btn-practical-toggle {
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-practical-toggle:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.btn-practical-toggle.active {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+  font-weight: 600;
+}
+
+.badge-practical-done {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+/* Pillar 2 in Three Pillars View */
+.pillar-course-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 0 8px;
+}
+
+.pillar-course-info {
+  flex: 1;
+}
+
+.pillar-course-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .course-metrics-grid { grid-template-columns: repeat(3, 1fr); }
+  .course-overview-grid { grid-template-columns: repeat(3, 1fr); }
+  .lesson-cell-actions { width: auto; }
+}
+
+@media (max-width: 640px) {
+  .course-metrics-grid { grid-template-columns: 1fr; }
+  .course-overview-grid { grid-template-columns: repeat(2, 1fr); }
+  .phase-header-btn { flex-direction: column; align-items: flex-start; }
+  .phase-header-right { width: 100%; justify-content: space-between; }
+  .lesson-cell-actions { text-align: left; }
+  .lesson-actions-wrap { flex-wrap: wrap; }
+}

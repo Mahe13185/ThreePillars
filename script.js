@@ -11,6 +11,7 @@
 const STORAGE_KEYS = {
   PROBLEMS: 'tp_dsa_problems_v1',
   PILLARS: 'tp_pillars_data_v1',
+  COURSE: 'tp_course_data_v1',
   SETTINGS: 'tp_settings_v1',
   // Legacy keys to check and preserve during migration
   LEGACY_KEYS: [
@@ -24,13 +25,20 @@ const STORAGE_KEYS = {
   ]
 };
 
-// Spaced Repetition Intervals in Days
+// Spaced Repetition Intervals in Days (DSA: 5 levels)
 const SP_INTERVALS = {
   1: 1,  // R1: 1 day
   2: 3,  // R2: 3 days
   3: 7,  // R3: 7 days
   4: 14, // R4: 14 days
   5: 30  // R5: 30 days
+};
+
+// Spaced Repetition Intervals in Days (Course Concepts: R1 -> R2 -> R3 -> Well Retained)
+const COURSE_SP_INTERVALS = {
+  1: 1,  // R1: 1 day after learning completion
+  2: 3,  // R2: 3 days after successful R1
+  3: 7   // R3: 7 days after successful R2
 };
 
 const WEEKDAY_SCHEDULE = {
@@ -63,6 +71,359 @@ const TOPICS_LIST = [
   'Tries',
   'Maths',
   'Other'
+];
+
+const EMBARKX_COURSE_TEMPLATE = [
+  {
+    "phaseId": 1,
+    "phaseNumber": 1,
+    "phaseTitle": "PHASE 1: BACKEND FUNDAMENTALS (Days 1-12)",
+    "dayRange": "Days 1-12",
+    "outcome": "Junior Backend Developer (Basic Spring Boot)",
+    "skills": "Development environment, Internet fundamentals, Dependency Injection, Spring Core concepts, REST API development, Spring Boot basics, Database concepts",
+    "lessons": [
+      {
+        "id": "c_p1_l1",
+        "title": "Introduction and Setup",
+        "dayRange": "DAY 1 - DAY 2"
+      },
+      {
+        "id": "c_p1_l2",
+        "title": "Basics of Web Development and Internet | Pre Spring Boot",
+        "dayRange": "DAY 1 - DAY 2"
+      },
+      {
+        "id": "c_p1_l3",
+        "title": "Spring Framework - The Basics | Before Spring Boot",
+        "dayRange": "DAY 3 - DAY 5"
+      },
+      {
+        "id": "c_p1_l4",
+        "title": "Spring Framework: Working with Spring Annotations",
+        "dayRange": "DAY 3 - DAY 5"
+      },
+      {
+        "id": "c_p1_l5",
+        "title": "Spring Boot 101: Building Our First REST API",
+        "dayRange": "DAY 6 - DAY 8"
+      },
+      {
+        "id": "c_p1_l6",
+        "title": "Getting Started With Ecommerce Application | Building Category Module",
+        "dayRange": "DAY 9 - DAY 12"
+      },
+      {
+        "id": "c_p1_l7",
+        "title": "Fundamentals of Databases and Persistence",
+        "dayRange": "DAY 9 - DAY 12"
+      }
+    ]
+  },
+  {
+    "phaseId": 2,
+    "phaseNumber": 2,
+    "phaseTitle": "PHASE 2: DATABASE & PERSISTENCE (Days 13-18)",
+    "dayRange": "Days 13-18",
+    "outcome": "Mid-Level Backend Developer (Security + Complex features)",
+    "skills": "ORM concepts, Code optimization, Data validation, Performance optimization, Complex data modeling, Business logic, Enterprise security, Authentication/Authorization",
+    "lessons": [
+      {
+        "id": "c_p2_l1",
+        "title": "Getting Started with JPA | Jakarta Persistence API",
+        "dayRange": "DAY 13 - DAY 15"
+      },
+      {
+        "id": "c_p2_l2",
+        "title": "Reduce Boilerplate Code: Introducing Lombok",
+        "dayRange": "DAY 13 - DAY 15"
+      },
+      {
+        "id": "c_p2_l3",
+        "title": "Validations in Spring Boot API | Backend Validations",
+        "dayRange": "DAY 16 - DAY 18"
+      },
+      {
+        "id": "c_p2_l4",
+        "title": "Implementing Pagination and Sorting in Our Ecommerce Project",
+        "dayRange": "DAY 16 - DAY 18"
+      }
+    ]
+  },
+  {
+    "phaseId": 3,
+    "phaseNumber": 3,
+    "phaseTitle": "PHASE 3: ADVANCED BACKEND (Days 19-25)",
+    "dayRange": "Days 19-25",
+    "outcome": "",
+    "skills": "",
+    "lessons": [
+      {
+        "id": "c_p3_l1",
+        "title": "Working with Multiple Entities and Relationships With JPA",
+        "dayRange": "DAY 19 - DAY 21"
+      },
+      {
+        "id": "c_p3_l2",
+        "title": "Managing Products in Our Ecommerce Application",
+        "dayRange": "DAY 19 - DAY 21"
+      },
+      {
+        "id": "c_p3_l3",
+        "title": "Spring Security | Securing Our Spring Boot Application",
+        "dayRange": "DAY 22 - DAY 25"
+      },
+      {
+        "id": "c_p3_l4",
+        "title": "Managing User Profiles and Roles | User Management For Spring Security",
+        "dayRange": "DAY 22 - DAY 25"
+      },
+      {
+        "id": "c_p3_l5",
+        "title": "Implementing Our Own Custom Authentication in E-commerce App",
+        "dayRange": "DAY 22 - DAY 25"
+      }
+    ]
+  },
+  {
+    "phaseId": 4,
+    "phaseNumber": 4,
+    "phaseTitle": "PHASE 4: E-COMMERCE BACKEND (Days 26-30)",
+    "dayRange": "Days 26-30",
+    "outcome": "Senior Backend Developer (Complete backend skills)",
+    "skills": "Complex business logic, Multi-database support, Payment processing, Cloud deployment, API documentation, Interview preparation",
+    "lessons": [
+      {
+        "id": "c_p4_l1",
+        "title": "Implementing Shopping Cart in Ecommerce Application",
+        "dayRange": "DAY 26 - DAY 28"
+      },
+      {
+        "id": "c_p4_l2",
+        "title": "Different Databases - PostgreSQL and MySQL",
+        "dayRange": "DAY 26 - DAY 28"
+      },
+      {
+        "id": "c_p4_l3",
+        "title": "Manage User Address to Ship Orders",
+        "dayRange": "DAY 29 - DAY 30"
+      },
+      {
+        "id": "c_p4_l4",
+        "title": "Orders and Payments in Our Ecommerce Application",
+        "dayRange": "DAY 29 - DAY 30"
+      },
+      {
+        "id": "c_p4_l5",
+        "title": "Deploying on AWS | Deploy Spring Boot Application on AWS",
+        "dayRange": "DAY 29 - DAY 30"
+      }
+    ]
+  },
+  {
+    "phaseId": 5,
+    "phaseNumber": 5,
+    "phaseTitle": "PHASE 5: BACKEND COMPLETION (Days 31-32)",
+    "dayRange": "Days 31-32",
+    "outcome": "",
+    "skills": "",
+    "lessons": [
+      {
+        "id": "c_p5_l1",
+        "title": "API Documentation with Swagger and Spring Boot",
+        "dayRange": "DAY 31 - DAY 32"
+      },
+      {
+        "id": "c_p5_l2",
+        "title": "Prove Your Backend Skills | Backend Interview Simulation",
+        "dayRange": "DAY 31 - DAY 32"
+      }
+    ]
+  },
+  {
+    "phaseId": 6,
+    "phaseNumber": 6,
+    "phaseTitle": "PHASE 6: REACT FUNDAMENTALS (Days 33-40)",
+    "dayRange": "Days 33-40",
+    "outcome": "Junior Full-Stack Developer (React basics)",
+    "skills": "React fundamentals, Component architecture, Advanced React concepts, State management",
+    "lessons": [
+      {
+        "id": "c_p6_l1",
+        "title": "Don't Skip | Becoming a Spring Boot Full Stack Java Developer | A Note",
+        "dayRange": "DAY 33 - DAY 35"
+      },
+      {
+        "id": "c_p6_l2",
+        "title": "[REACT BEGINNER] Introduction to React",
+        "dayRange": "DAY 33 - DAY 35"
+      },
+      {
+        "id": "c_p6_l3",
+        "title": "[REACT BEGINNER] Getting Started with JSX",
+        "dayRange": "DAY 33 - DAY 35"
+      },
+      {
+        "id": "c_p6_l4",
+        "title": "[REACT BEGINNER] Components and Props in React",
+        "dayRange": "DAY 33 - DAY 35"
+      },
+      {
+        "id": "c_p6_l5",
+        "title": "[REACT INTERMEDIATE] Introduction to React Hooks",
+        "dayRange": "DAY 36 - DAY 40"
+      },
+      {
+        "id": "c_p6_l6",
+        "title": "[REACT INTERMEDIATE] Introduction to useEffect Hook",
+        "dayRange": "DAY 36 - DAY 40"
+      },
+      {
+        "id": "c_p6_l7",
+        "title": "[REACT INTERMEDIATE] Introduction to useRef Hook",
+        "dayRange": "DAY 36 - DAY 40"
+      },
+      {
+        "id": "c_p6_l8",
+        "title": "[REACT INTERMEDIATE] Introduction to useContext Hook",
+        "dayRange": "DAY 36 - DAY 40"
+      }
+    ]
+  },
+  {
+    "phaseId": 7,
+    "phaseNumber": 7,
+    "phaseTitle": "PHASE 7: ADVANCED REACT (Days 41-48)",
+    "dayRange": "Days 41-48",
+    "outcome": "Mid-Level Full-Stack Developer (Advanced React)",
+    "skills": "Custom hooks, API integration, Styling, Navigation, Global state management",
+    "lessons": [
+      {
+        "id": "c_p7_l1",
+        "title": "[REACT ADVANCE] Custom Hooks in React",
+        "dayRange": "DAY 41 - DAY 44"
+      },
+      {
+        "id": "c_p7_l2",
+        "title": "[REACT ADVANCE] APIs and React",
+        "dayRange": "DAY 41 - DAY 44"
+      },
+      {
+        "id": "c_p7_l3",
+        "title": "[REACT ADVANCE] React Hook Forms",
+        "dayRange": "DAY 41 - DAY 44"
+      },
+      {
+        "id": "c_p7_l4",
+        "title": "[REACT ADVANCE] React with Tailwind CSS",
+        "dayRange": "DAY 41 - DAY 44"
+      },
+      {
+        "id": "c_p7_l5",
+        "title": "[REACT ADVANCE] Routing with React",
+        "dayRange": "DAY 45 - DAY 48"
+      },
+      {
+        "id": "c_p7_l6",
+        "title": "[REACT ADVANCE] React Router Hooks to Know",
+        "dayRange": "DAY 45 - DAY 48"
+      },
+      {
+        "id": "c_p7_l7",
+        "title": "[REACT ADVANCE] Redux",
+        "dayRange": "DAY 45 - DAY 48"
+      }
+    ]
+  },
+  {
+    "phaseId": 8,
+    "phaseNumber": 8,
+    "phaseTitle": "PHASE 8: FULL-STACK INTEGRATION (Days 49-65)",
+    "dayRange": "Days 49-65",
+    "outcome": "Senior Full-Stack Developer (Complete e-commerce)",
+    "skills": "Implementing things learned into a project, Understand how things work in project, Payment processing, Authentication flow",
+    "lessons": [
+      {
+        "id": "c_p8_l1",
+        "title": "Setting up Project & Building Home Page",
+        "dayRange": "DAY 49 - DAY 55"
+      },
+      {
+        "id": "c_p8_l2",
+        "title": "Building Product StoreFront",
+        "dayRange": "DAY 49 - DAY 55"
+      },
+      {
+        "id": "c_p8_l3",
+        "title": "Building HomePage and Navigation",
+        "dayRange": "DAY 49 - DAY 55"
+      },
+      {
+        "id": "c_p8_l4",
+        "title": "Building Advance Shopping Cart Using React + Redux",
+        "dayRange": "DAY 49 - DAY 55"
+      },
+      {
+        "id": "c_p8_l5",
+        "title": "Authenticating Users On Frontend Using React",
+        "dayRange": "DAY 56 - DAY 65"
+      },
+      {
+        "id": "c_p8_l6",
+        "title": "Checkout Flow On Frontend Using React",
+        "dayRange": "DAY 56 - DAY 65"
+      },
+      {
+        "id": "c_p8_l7",
+        "title": "Payment [Stripe] Integration On Frontend Using React",
+        "dayRange": "DAY 56 - DAY 65"
+      }
+    ]
+  },
+  {
+    "phaseId": 9,
+    "phaseNumber": 9,
+    "phaseTitle": "PHASE 9: ADMIN & SELLER PANELS (Days 66-69)",
+    "dayRange": "Days 66-69",
+    "outcome": "Enterprise Full-Stack Developer (AI + Modern deployment)",
+    "skills": "Role-based access, Admin interfaces, AI integration, Modern deployment",
+    "lessons": [
+      {
+        "id": "c_p9_l1",
+        "title": "Building a Full-Stack Admin Panel with Role-Based Authorization",
+        "dayRange": "DAY 66 - DAY 69"
+      },
+      {
+        "id": "c_p9_l2",
+        "title": "Building a Full-Stack Seller Panel with Role-Based Authorization",
+        "dayRange": "DAY 66 - DAY 69"
+      }
+    ]
+  },
+  {
+    "phaseId": 10,
+    "phaseNumber": 10,
+    "phaseTitle": "PHASE 10: AI INTEGRATION & DEPLOYMENT (Days 70-72)",
+    "dayRange": "Days 70-72",
+    "outcome": "",
+    "skills": "",
+    "lessons": [
+      {
+        "id": "c_p10_l1",
+        "title": "Welcome to the World of AI | Building Applications using Spring AI",
+        "dayRange": "DAY 70 - DAY 72"
+      },
+      {
+        "id": "c_p10_l2",
+        "title": "Welcome to the World of AI | Building Audio Transcriber | Spring AI",
+        "dayRange": "DAY 70 - DAY 72"
+      },
+      {
+        "id": "c_p10_l3",
+        "title": "TIPS: Deploying Full Stack Applications for FREE",
+        "dayRange": "DAY 70 - DAY 72"
+      }
+    ]
+  }
 ];
 
 // =============================================================================
@@ -145,7 +506,8 @@ function formatHeaderDate(dateStr) {
 
 const AppState = {
   currentTab: 'dashboard',
-  currentQueueFilter: 'due',
+  currentQueueCategory: 'all', // 'all' | 'dsa' | 'course'
+  currentQueueFilter: 'due',    // 'due' | 'overdue' | 'upcoming' | 'retained'
   selectedPillarDate: getTodayDateString(),
   searchQuery: '',
   filterTopic: 'ALL',
@@ -156,7 +518,16 @@ const AppState = {
   problemToDeleteId: null,
   selectedHeatmapDate: null,
 
+  // Course Tracker State
+  courseFilterPhase: 'ALL',
+  courseFilterStatus: 'ALL',
+  courseSearchQuery: '',
+  courseExpandedPhases: { 1: true },
+  activeLessonForRevision: null,
+  activeLessonForDetails: null,
+
   problems: [],
+  courseLessons: [],
   pillarsData: {} // keyed by YYYY-MM-DD: { dsa: { done, task }, java: { done, task }, sw360: { done, task }, reflection: '' }
 };
 
@@ -230,10 +601,59 @@ function loadDataFromStorage() {
     // Ensure initial structure for today's pillars if not set
     ensurePillarsDayRecord(getTodayDateString());
 
+    // 3. Load Course Data (EmbarkX Spring Boot Tracker)
+    const storedCourse = localStorage.getItem(STORAGE_KEYS.COURSE);
+    let loadedCourseMap = {};
+    if (storedCourse !== null) {
+      try {
+        const parsedCourse = JSON.parse(storedCourse);
+        if (Array.isArray(parsedCourse)) {
+          parsedCourse.forEach(item => {
+            if (item && item.id) {
+              loadedCourseMap[item.id] = item;
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error parsing stored course data:', e);
+      }
+    }
+
+    // Merge with master template to guarantee all 10 phases and 50 lessons
+    AppState.courseLessons = [];
+    EMBARKX_COURSE_TEMPLATE.forEach(phase => {
+      phase.lessons.forEach(lTemplate => {
+        const saved = loadedCourseMap[lTemplate.id] || {};
+        AppState.courseLessons.push({
+          id: lTemplate.id,
+          phaseId: phase.phaseId,
+          phaseNumber: phase.phaseNumber,
+          phaseTitle: phase.phaseTitle,
+          phaseDayRange: phase.dayRange,
+          phaseOutcome: phase.outcome || '',
+          phaseSkills: phase.skills || '',
+          title: lTemplate.title,
+          dayRange: lTemplate.dayRange,
+          completed: !!saved.completed,
+          completedDate: saved.completedDate || null,
+          practicalDone: !!saved.practicalDone,
+          notes: saved.notes || '',
+          stage: typeof saved.stage === 'number' ? saved.stage : 0,
+          nextRevisionDate: saved.nextRevisionDate || null,
+          status: saved.status || (saved.completed ? 'Revising' : 'Pending'),
+          history: Array.isArray(saved.history) ? saved.history : []
+        });
+      });
+    });
+
+    // Save initialized or migrated course data back to LocalStorage
+    saveCourseToStorage();
+
   } catch (err) {
     console.error('Error loading data from LocalStorage:', err);
     AppState.problems = [];
     AppState.pillarsData = {};
+    AppState.courseLessons = [];
   }
 }
 
@@ -254,6 +674,14 @@ function savePillarsToStorage() {
     localStorage.setItem(STORAGE_KEYS.PILLARS, JSON.stringify(AppState.pillarsData));
   } catch (err) {
     console.error('Error saving pillars to LocalStorage:', err);
+  }
+}
+
+function saveCourseToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEYS.COURSE, JSON.stringify(AppState.courseLessons));
+  } catch (err) {
+    console.error('Error saving course to LocalStorage:', err);
   }
 }
 
@@ -352,6 +780,146 @@ function recordRevisionAttempt(problemId, outcome, notes = '') {
   return true;
 }
 
+/**
+ * Calculates next course concept revision schedule:
+ * Initial Learning -> R1 (1d after initial completion)
+ * R1 -> R2 (3d after R1)
+ * R2 -> R3 (7d after R2)
+ * R3 -> Well Retained
+ */
+function calculateCourseNextRevision(currentStage, revisionDateStr) {
+  let nextStage = currentStage || 1;
+  let nextDate = null;
+  let newStatus = 'Revising';
+
+  if (currentStage === 1) {
+    // R1 completed -> R2 in 3 days
+    nextStage = 2;
+    nextDate = addDaysToDate(revisionDateStr, COURSE_SP_INTERVALS[2]); // 3 days
+    newStatus = 'Revising';
+  } else if (currentStage === 2) {
+    // R2 completed -> R3 in 7 days
+    nextStage = 3;
+    nextDate = addDaysToDate(revisionDateStr, COURSE_SP_INTERVALS[3]); // 7 days
+    newStatus = 'Revising';
+  } else if (currentStage >= 3) {
+    // R3 completed -> Well Retained
+    nextStage = 4;
+    nextDate = null;
+    newStatus = 'Well Retained';
+  }
+
+  return { nextStage, nextDate, newStatus };
+}
+
+/**
+ * Marks a course lesson completed or incomplete independently
+ */
+function toggleLessonCompletion(lessonId, isCompleted) {
+  const lesson = AppState.courseLessons.find(l => l.id === lessonId);
+  if (!lesson) return;
+
+  const todayStr = getTodayDateString();
+
+  if (isCompleted) {
+    lesson.completed = true;
+    if (!lesson.completedDate) {
+      lesson.completedDate = todayStr;
+    }
+    // Schedule R1: 1 day after initial learning completion
+    if (!lesson.stage || lesson.stage === 0) {
+      lesson.stage = 1;
+      lesson.nextRevisionDate = addDaysToDate(lesson.completedDate, COURSE_SP_INTERVALS[1]); // 1 day
+      lesson.status = 'Revising';
+    }
+
+    // Auto mark Pillar 2 daily habit for today
+    ensurePillarsDayRecord(todayStr);
+    AppState.pillarsData[todayStr].java.done = true;
+    savePillarsToStorage();
+  } else {
+    // Unchecking
+    if (lesson.history && lesson.history.length > 0) {
+      const confirmReset = confirm(`Marking "${lesson.title}" incomplete will reset its spaced repetition revision schedule. Do you want to continue?`);
+      if (!confirmReset) {
+        refreshUI();
+        return;
+      }
+    }
+    lesson.completed = false;
+    lesson.completedDate = null;
+    lesson.stage = 0;
+    lesson.nextRevisionDate = null;
+    lesson.status = 'Pending';
+  }
+
+  lesson.updatedAt = new Date().toISOString();
+  saveCourseToStorage();
+  refreshUI();
+}
+
+/**
+ * Toggles practical coding status for a lesson
+ */
+function toggleLessonPractical(lessonId, isPractical) {
+  const lesson = AppState.courseLessons.find(l => l.id === lessonId);
+  if (!lesson) return;
+  lesson.practicalDone = (typeof isPractical === 'boolean') ? isPractical : !lesson.practicalDone;
+  lesson.updatedAt = new Date().toISOString();
+  saveCourseToStorage();
+  refreshUI();
+}
+
+/**
+ * Saves personal notes for a course lesson
+ */
+function saveLessonNotes(lessonId, notes) {
+  const lesson = AppState.courseLessons.find(l => l.id === lessonId);
+  if (!lesson) return;
+  lesson.notes = notes;
+  lesson.updatedAt = new Date().toISOString();
+  saveCourseToStorage();
+}
+
+/**
+ * Submits a concept revision result for a course lesson
+ * Initial -> R1 (1d) -> R2 (3d) -> R3 (7d) -> Well Retained
+ */
+function recordConceptRevision(lessonId, notes = '') {
+  const lesson = AppState.courseLessons.find(l => l.id === lessonId);
+  if (!lesson || !lesson.completed) return false;
+
+  const todayStr = getTodayDateString();
+  const currentStage = lesson.stage || 1;
+
+  if (currentStage > 3 || lesson.status === 'Well Retained') {
+    return false; // Already well retained
+  }
+
+  if (!Array.isArray(lesson.history)) {
+    lesson.history = [];
+  }
+
+  // Record history attempt
+  lesson.history.push({
+    revisionNumber: currentStage,
+    revisionDate: todayStr,
+    result: 'Completed',
+    notes: (notes || '').trim(),
+    timestamp: new Date().toISOString()
+  });
+
+  const schedule = calculateCourseNextRevision(currentStage, todayStr);
+  lesson.stage = schedule.nextStage;
+  lesson.nextRevisionDate = schedule.nextDate;
+  lesson.status = schedule.newStatus;
+  lesson.updatedAt = new Date().toISOString();
+
+  saveCourseToStorage();
+  refreshUI();
+  return true;
+}
+
 // =============================================================================
 // 5. QUEUE CATEGORIZATION & QUERIES
 // =============================================================================
@@ -387,6 +955,97 @@ function getQueueCategorizedProblems() {
   return { due, overdue, upcoming, todayStr };
 }
 
+function getQueueCategorizedCourses() {
+  const todayStr = getTodayDateString();
+  const due = [];
+  const overdue = [];
+  const upcoming = [];
+  const retained = [];
+
+  AppState.courseLessons.forEach(lesson => {
+    if (lesson.status === 'Well Retained') {
+      retained.push(lesson);
+      return;
+    }
+    if (!lesson.completed || !lesson.nextRevisionDate) {
+      return;
+    }
+
+    const diff = getDaysDifference(lesson.nextRevisionDate, todayStr);
+    if (diff === 0) {
+      due.push(lesson);
+    } else if (diff < 0) {
+      overdue.push(lesson);
+    } else if (diff > 0 && diff <= 7) {
+      upcoming.push(lesson);
+    }
+  });
+
+  overdue.sort((a, b) => String(a.nextRevisionDate || '').localeCompare(String(b.nextRevisionDate || '')));
+  due.sort((a, b) => a.phaseNumber - b.phaseNumber);
+  upcoming.sort((a, b) => String(a.nextRevisionDate || '').localeCompare(String(b.nextRevisionDate || '')));
+
+  return { due, overdue, upcoming, retained, todayStr };
+}
+
+function getUnifiedRevisionQueue() {
+  const todayStr = getTodayDateString();
+  const dsaQueue = getQueueCategorizedProblems();
+  const courseQueue = getQueueCategorizedCourses();
+
+  // Also collect retained for DSA
+  const dsaRetained = AppState.problems.filter(p => p.status === 'Well Retained');
+
+  // Wrap with item type indicator
+  const wrapDsa = (list) => list.map(p => ({ type: 'dsa', data: p }));
+  const wrapCourse = (list) => list.map(l => ({ type: 'course', data: l }));
+
+  const allDue = [...wrapDsa(dsaQueue.due), ...wrapCourse(courseQueue.due)];
+  const allOverdue = [...wrapDsa(dsaQueue.overdue), ...wrapCourse(courseQueue.overdue)];
+  const allUpcoming = [...wrapDsa(dsaQueue.upcoming), ...wrapCourse(courseQueue.upcoming)];
+  const allRetained = [...wrapDsa(dsaRetained), ...wrapCourse(courseQueue.retained)];
+
+  // Category counts (due + overdue + upcoming + retained)
+  const countDsaTotal = dsaQueue.due.length + dsaQueue.overdue.length + dsaQueue.upcoming.length + dsaRetained.length;
+  const countCourseTotal = courseQueue.due.length + courseQueue.overdue.length + courseQueue.upcoming.length + courseQueue.retained.length;
+  const countAllTotal = countDsaTotal + countCourseTotal;
+
+  // Filter by AppState.currentQueueCategory
+  let activeDue = allDue;
+  let activeOverdue = allOverdue;
+  let activeUpcoming = allUpcoming;
+  let activeRetained = allRetained;
+
+  if (AppState.currentQueueCategory === 'dsa') {
+    activeDue = wrapDsa(dsaQueue.due);
+    activeOverdue = wrapDsa(dsaQueue.overdue);
+    activeUpcoming = wrapDsa(dsaQueue.upcoming);
+    activeRetained = wrapDsa(dsaRetained);
+  } else if (AppState.currentQueueCategory === 'course') {
+    activeDue = wrapCourse(courseQueue.due);
+    activeOverdue = wrapCourse(courseQueue.overdue);
+    activeUpcoming = wrapCourse(courseQueue.upcoming);
+    activeRetained = wrapCourse(courseQueue.retained);
+  }
+
+  return {
+    todayStr,
+    due: activeDue,
+    overdue: activeOverdue,
+    upcoming: activeUpcoming,
+    retained: activeRetained,
+    counts: {
+      all: countAllTotal,
+      dsa: countDsaTotal,
+      course: countCourseTotal,
+      dsaDue: dsaQueue.due.length,
+      dsaOverdue: dsaQueue.overdue.length,
+      courseDue: courseQueue.due.length,
+      courseOverdue: courseQueue.overdue.length
+    }
+  };
+}
+
 // =============================================================================
 // 6. UI RENDERING & COMPONENT UPDATES
 // =============================================================================
@@ -395,6 +1054,7 @@ function refreshUI() {
   renderHeader();
   renderDashboard();
   renderDSATracker();
+  renderCourseTracker();
   renderRevisionQueue();
   renderThreePillars();
 }
@@ -409,8 +1069,8 @@ function renderHeader() {
     headerDateEl.textContent = formatHeaderDate(todayStr);
   }
 
-  const { due, overdue } = getQueueCategorizedProblems();
-  const totalQueueAlert = due.length + overdue.length;
+  const uQueue = getUnifiedRevisionQueue();
+  const totalQueueAlert = uQueue.counts.dsaDue + uQueue.counts.dsaOverdue + uQueue.counts.courseDue + uQueue.counts.courseOverdue;
   const queueBadge = document.getElementById('nav-queue-badge');
   if (queueBadge) {
     if (totalQueueAlert > 0) {
@@ -418,6 +1078,17 @@ function renderHeader() {
       queueBadge.style.display = 'inline-block';
     } else {
       queueBadge.style.display = 'none';
+    }
+  }
+
+  const courseBadge = document.getElementById('nav-course-badge');
+  const courseAlert = uQueue.counts.courseDue + uQueue.counts.courseOverdue;
+  if (courseBadge) {
+    if (courseAlert > 0) {
+      courseBadge.textContent = courseAlert;
+      courseBadge.style.display = 'inline-block';
+    } else {
+      courseBadge.style.display = 'none';
     }
   }
 
@@ -472,66 +1143,166 @@ function renderDashboard() {
     statusSw360.textContent = todayPillars.sw360.done ? 'Done' : 'Pending';
   }
 
-  // 2. Metrics
-  const { due, overdue } = getQueueCategorizedProblems();
+  // 2. Pillar 1: DSA Metrics
+  const { due: dsaDue, overdue: dsaOverdue } = getQueueCategorizedProblems();
   const totalSolved = AppState.problems.length;
-  const wellRetained = AppState.problems.filter(p => p.status === 'Well Retained').length;
+  const dsaWellRetained = AppState.problems.filter(p => p.status === 'Well Retained').length;
 
   document.getElementById('stat-total-solved').textContent = totalSolved;
-  document.getElementById('stat-due-today').textContent = due.length;
-  document.getElementById('stat-overdue').textContent = overdue.length;
-  document.getElementById('stat-well-retained').textContent = wellRetained;
+  document.getElementById('stat-due-today').textContent = dsaDue.length;
+  document.getElementById('stat-overdue').textContent = dsaOverdue.length;
+  document.getElementById('stat-well-retained').textContent = dsaWellRetained;
 
-  // 3. Today's Revision Focus
+  // 3. Pillar 2: Course Metrics
+  const courseQueue = getQueueCategorizedCourses();
+  const totalCourseLessons = AppState.courseLessons.length || 50;
+  const completedLessons = AppState.courseLessons.filter(l => l.completed).length;
+  const pendingLessons = totalCourseLessons - completedLessons;
+  const coursePct = Math.round((completedLessons / totalCourseLessons) * 100);
+  const courseWellRetained = AppState.courseLessons.filter(l => l.status === 'Well Retained').length;
+
+  const statCourseTotal = document.getElementById('stat-course-total');
+  const statCourseCompleted = document.getElementById('stat-course-completed');
+  const statCourseRate = document.getElementById('stat-course-rate');
+  const statCoursePending = document.getElementById('stat-course-pending');
+  const statCourseDue = document.getElementById('stat-course-due');
+  const statCourseOverdue = document.getElementById('stat-course-overdue');
+  const statCourseRetained = document.getElementById('stat-course-retained');
+
+  if (statCourseTotal) statCourseTotal.textContent = totalCourseLessons;
+  if (statCourseCompleted) statCourseCompleted.textContent = completedLessons;
+  if (statCourseRate) statCourseRate.textContent = `${coursePct}% Done`;
+  if (statCoursePending) statCoursePending.textContent = pendingLessons;
+  if (statCourseDue) statCourseDue.textContent = courseQueue.due.length;
+  if (statCourseOverdue) statCourseOverdue.textContent = courseQueue.overdue.length;
+  if (statCourseRetained) statCourseRetained.textContent = courseWellRetained;
+
+  // 4. Course Progress View: Phase-wise Completion
+  const phaseProgressSummary = document.getElementById('dash-phase-progress-summary');
+  if (phaseProgressSummary) {
+    phaseProgressSummary.textContent = `${completedLessons} / ${totalCourseLessons} Lessons Completed (${coursePct}%)`;
+  }
+
+  const phaseProgressGrid = document.getElementById('dash-course-phase-progress');
+  if (phaseProgressGrid) {
+    phaseProgressGrid.innerHTML = '';
+    EMBARKX_COURSE_TEMPLATE.forEach(phase => {
+      const pLessons = AppState.courseLessons.filter(l => l.phaseId === phase.phaseId);
+      const pTotal = pLessons.length;
+      const pDone = pLessons.filter(l => l.completed).length;
+      const pPct = pTotal > 0 ? Math.round((pDone / pTotal) * 100) : 0;
+      const isComplete = pDone === pTotal && pTotal > 0;
+
+      const item = document.createElement('div');
+      item.className = 'phase-progress-item';
+      item.setAttribute('data-phase-id', phase.phaseId);
+      item.title = `Click to view Phase ${phase.phaseId} in Course Tracker`;
+      item.innerHTML = `
+        <div class="phase-progress-top">
+          <span class="phase-progress-title">Phase ${phase.phaseId}: ${escapeHtml(phase.phaseTitle.replace(/^PHASE \d+:\s*/i, '').replace(/\s*\([^)]*\)$/, ''))}</span>
+          <span class="phase-progress-pct ${isComplete ? 'complete' : ''}">${pPct}%</span>
+        </div>
+        <div class="phase-progress-sub">
+          <span>${phase.dayRange || ''}</span>
+          <span>•</span>
+          <span>${pDone}/${pTotal} lessons</span>
+        </div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner ${isComplete ? 'success' : ''}" style="width: ${pPct}%;"></div>
+        </div>
+      `;
+      phaseProgressGrid.appendChild(item);
+    });
+  }
+
+  // 5. Today's Revision Focus (Combined DSA & Course Concepts)
   const focusContainer = document.getElementById('dash-focus-list');
   if (focusContainer) {
     focusContainer.innerHTML = '';
-    const focusItems = [...overdue, ...due];
+
+    // Unified focus items: Overdue first, then Due today
+    const focusItems = [];
+    dsaOverdue.forEach(prob => focusItems.push({ type: 'dsa', isOverdue: true, item: prob }));
+    courseQueue.overdue.forEach(lesson => focusItems.push({ type: 'course', isOverdue: true, item: lesson }));
+    dsaDue.forEach(prob => focusItems.push({ type: 'dsa', isOverdue: false, item: prob }));
+    courseQueue.due.forEach(lesson => focusItems.push({ type: 'course', isOverdue: false, item: lesson }));
 
     if (focusItems.length === 0) {
       focusContainer.innerHTML = `
         <div style="padding: 20px 12px; text-align: center; color: var(--text-muted);">
           <p style="font-weight: 500;">No revisions due today</p>
-          <p style="font-size: 0.78rem; color: var(--text-light); margin-top: 2px;">All scheduled recalls are up to date.</p>
+          <p style="font-size: 0.78rem; color: var(--text-light); margin-top: 2px;">All DSA and Course concept spaced recalls are up to date.</p>
         </div>
       `;
     } else {
-      // Display up to 5 priority items
-      focusItems.slice(0, 5).forEach(prob => {
-        const isOverdue = overdue.includes(prob);
+      // Display up to 6 priority items
+      focusItems.slice(0, 6).forEach(fObj => {
         const row = document.createElement('div');
         row.className = 'focus-problem-row';
-        row.innerHTML = `
-          <div class="focus-problem-left">
-            <div>
-              <span class="focus-problem-name">${escapeHtml(prob.title)}</span>
-              <div class="focus-problem-meta">
-                <span class="badge ${getDifficultyBadgeClass(prob.difficulty)}">${prob.difficulty}</span>
-                <span>${escapeHtml(prob.topic)}</span>
-                <span>•</span>
-                <span class="badge ${isOverdue ? 'status-overdue' : 'status-due'}">
-                  ${isOverdue ? 'Overdue' : 'Due Today'}
-                </span>
-                <span>Stage: R${prob.stage || 1}</span>
+
+        if (fObj.type === 'dsa') {
+          const prob = fObj.item;
+          row.innerHTML = `
+            <div class="focus-problem-left">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="pillar-tag dsa-tag" style="font-size: 0.7rem; padding: 1px 6px;">DSA</span>
+                  <span class="focus-problem-name">${escapeHtml(prob.title)}</span>
+                </div>
+                <div class="focus-problem-meta" style="margin-top: 3px;">
+                  <span class="badge ${getDifficultyBadgeClass(prob.difficulty)}">${prob.difficulty}</span>
+                  <span>${escapeHtml(prob.topic)}</span>
+                  <span>•</span>
+                  <span class="badge ${fObj.isOverdue ? 'status-overdue' : 'status-due'}">
+                    ${fObj.isOverdue ? 'Overdue' : 'Due Today'}
+                  </span>
+                  <span>Stage: R${prob.stage || 1}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <button class="btn btn-primary btn-sm btn-dash-revise" data-id="${prob.id}">
-              Revise Now →
-            </button>
-          </div>
-        `;
+            <div>
+              <button class="btn btn-primary btn-sm btn-dash-revise" data-id="${prob.id}">
+                Revise Now →
+              </button>
+            </div>
+          `;
+        } else {
+          const lesson = fObj.item;
+          row.innerHTML = `
+            <div class="focus-problem-left">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="pillar-tag java-tag" style="font-size: 0.7rem; padding: 1px 6px;">Spring Boot</span>
+                  <span class="focus-problem-name">${escapeHtml(lesson.title)}</span>
+                </div>
+                <div class="focus-problem-meta" style="margin-top: 3px;">
+                  <span class="badge badge-neutral">Phase ${lesson.phaseNumber || 1}</span>
+                  <span>${escapeHtml(lesson.dayRange || '')}</span>
+                  <span>•</span>
+                  <span class="badge ${fObj.isOverdue ? 'status-overdue' : 'status-due'}">
+                    ${fObj.isOverdue ? 'Overdue' : 'Due Today'}
+                  </span>
+                  <span>Stage: R${lesson.stage || 1}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-primary btn-sm btn-dash-concept-revise" data-id="${lesson.id}">
+                Revise Concept →
+              </button>
+            </div>
+          `;
+        }
         focusContainer.appendChild(row);
       });
 
-      if (focusItems.length > 5) {
+      if (focusItems.length > 6) {
         const moreDiv = document.createElement('div');
         moreDiv.style.textAlign = 'center';
         moreDiv.style.paddingTop = '8px';
         moreDiv.innerHTML = `
           <button class="btn btn-ghost btn-sm" id="btn-dash-more-revisions">
-            + ${focusItems.length - 5} more in Revision Queue
+            + ${focusItems.length - 6} more in Revision Queue
           </button>
         `;
         focusContainer.appendChild(moreDiv);
@@ -542,7 +1313,7 @@ function renderDashboard() {
     }
   }
 
-  // 4. GitHub-Style DSA Contribution Heatmap
+  // 6. GitHub-Style DSA Contribution Heatmap
   renderDSAContributionHeatmap();
 }
 
@@ -1015,20 +1786,258 @@ function renderDSATracker() {
 }
 
 /**
- * Render Section 3: Revision Queue
+ * Render Section: EmbarkX Spring Boot Course Tracker
+ */
+function renderCourseTracker() {
+  const container = document.getElementById('course-phases-container');
+  if (!container) return;
+
+  const todayStr = getTodayDateString();
+  const totalLessons = AppState.courseLessons.length || 50;
+  const completedLessons = AppState.courseLessons.filter(l => l.completed).length;
+  const pendingLessons = totalLessons - completedLessons;
+  const completionPct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+  const practicalCount = AppState.courseLessons.filter(l => l.practicalDone).length;
+  const wellRetainedCount = AppState.courseLessons.filter(l => l.status === 'Well Retained').length;
+
+  // Update Overview Banner Elements
+  const totalEl = document.getElementById('course-total-lessons');
+  const compEl = document.getElementById('course-completed-lessons');
+  const rateEl = document.getElementById('course-completion-rate');
+  const pendEl = document.getElementById('course-pending-lessons');
+  const practEl = document.getElementById('course-practical-count');
+  const retainEl = document.getElementById('course-retained-lessons');
+  const progBar = document.getElementById('course-overall-progress-bar');
+
+  if (totalEl) totalEl.textContent = totalLessons;
+  if (compEl) compEl.textContent = completedLessons;
+  if (rateEl) rateEl.textContent = `${completionPct}% Complete`;
+  if (pendEl) pendEl.textContent = pendingLessons;
+  if (practEl) practEl.textContent = practicalCount;
+  if (retainEl) retainEl.textContent = wellRetainedCount;
+  if (progBar) progBar.style.width = `${completionPct}%`;
+
+  container.innerHTML = '';
+  let visibleLessonsCount = 0;
+
+  const searchQ = (AppState.courseSearchQuery || '').toLowerCase();
+  const phaseFilter = AppState.courseFilterPhase;
+  const statusFilter = AppState.courseFilterStatus;
+
+  EMBARKX_COURSE_TEMPLATE.forEach(phase => {
+    // Check phase filter
+    if (phaseFilter !== 'ALL' && String(phase.phaseId) !== String(phaseFilter)) {
+      return;
+    }
+
+    const phaseLessons = AppState.courseLessons.filter(l => l.phaseId === phase.phaseId);
+    const pTotal = phaseLessons.length;
+    const pDone = phaseLessons.filter(l => l.completed).length;
+    const pPct = pTotal > 0 ? Math.round((pDone / pTotal) * 100) : 0;
+
+    // Filter lessons inside phase based on status and search query
+    const filteredLessons = phaseLessons.filter(lesson => {
+      // Status filter
+      if (statusFilter === 'completed' && !lesson.completed) return false;
+      if (statusFilter === 'pending' && lesson.completed) return false;
+      if (statusFilter === 'practical' && !lesson.practicalDone) return false;
+      if (statusFilter === 'revising' && (lesson.status !== 'Revising' || !lesson.completed)) return false;
+      if (statusFilter === 'due') {
+        if (!lesson.completed || !lesson.nextRevisionDate || lesson.status === 'Well Retained') return false;
+        const diff = getDaysDifference(lesson.nextRevisionDate, todayStr);
+        if (diff !== 0) return false;
+      }
+      if (statusFilter === 'overdue') {
+        if (!lesson.completed || !lesson.nextRevisionDate || lesson.status === 'Well Retained') return false;
+        const diff = getDaysDifference(lesson.nextRevisionDate, todayStr);
+        if (diff >= 0) return false;
+      }
+      if (statusFilter === 'retained' && lesson.status !== 'Well Retained') return false;
+
+      // Search query filter
+      if (searchQ) {
+        const matchesTitle = lesson.title.toLowerCase().includes(searchQ);
+        const matchesDay = (lesson.dayRange || '').toLowerCase().includes(searchQ);
+        const matchesPhase = phase.phaseTitle.toLowerCase().includes(searchQ);
+        const matchesNotes = (lesson.notes || '').toLowerCase().includes(searchQ);
+        if (!matchesTitle && !matchesDay && !matchesPhase && !matchesNotes) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    // If search/status filter active and 0 lessons match in this phase, don't show the phase
+    if ((searchQ || statusFilter !== 'ALL') && filteredLessons.length === 0) {
+      return;
+    }
+
+    visibleLessonsCount += filteredLessons.length;
+    const isOpen = !!AppState.courseExpandedPhases[phase.phaseId];
+
+    const phaseCard = document.createElement('div');
+    phaseCard.className = `phase-accordion-card ${isOpen ? 'open' : ''}`;
+    phaseCard.setAttribute('data-phase-id', phase.phaseId);
+
+    // Build Phase Header
+    let outcomeHtml = '';
+    if (phase.outcome) {
+      outcomeHtml = `<span class="badge diff-medium" style="font-size: 0.72rem;">${escapeHtml(phase.outcome)}</span>`;
+    }
+
+    phaseCard.innerHTML = `
+      <button type="button" class="phase-header-btn" data-toggle-phase="${phase.phaseId}">
+        <div class="phase-header-left">
+          <span class="phase-chevron">›</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span class="phase-title-text">${escapeHtml(phase.phaseTitle)}</span>
+              ${phase.dayRange ? `<span class="badge badge-neutral" style="font-size: 0.72rem;">${escapeHtml(phase.dayRange)}</span>` : ''}
+              ${outcomeHtml}
+            </div>
+          </div>
+        </div>
+        <div class="phase-header-right">
+          <div class="phase-progress-info">
+            <span class="phase-progress-text">${pDone} / ${pTotal} (${pPct}%)</span>
+            <div class="phase-progress-mini-bar">
+              <div class="progress-bar-inner ${pDone === pTotal && pTotal > 0 ? 'success' : ''}" style="width: ${pPct}%;"></div>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <div class="phase-accordion-body">
+        ${phase.skills ? `
+          <div class="phase-meta-banner">
+            ${phase.outcome ? `<div class="phase-meta-banner-top"><span class="phase-outcome-text">Outcome: ${escapeHtml(phase.outcome)}</span></div>` : ''}
+            <div class="phase-skills-text"><strong>Skills Gained:</strong> ${escapeHtml(phase.skills)}</div>
+          </div>
+        ` : ''}
+
+        <table class="course-lessons-table">
+          <tbody>
+            ${filteredLessons.map(lesson => {
+              const diff = lesson.nextRevisionDate ? getDaysDifference(lesson.nextRevisionDate, todayStr) : null;
+              let revBadgeHtml = '';
+
+              if (!lesson.completed) {
+                revBadgeHtml = `<span class="badge badge-neutral">Not Completed</span>`;
+              } else if (lesson.status === 'Well Retained') {
+                revBadgeHtml = `<span class="badge diff-easy">★ Well Retained</span>`;
+              } else if (diff !== null) {
+                if (diff < 0) {
+                  revBadgeHtml = `<span class="schedule-due-tag tag-overdue">R${lesson.stage} Overdue (${Math.abs(diff)}d)</span>`;
+                } else if (diff === 0) {
+                  revBadgeHtml = `<span class="schedule-due-tag tag-due">R${lesson.stage} Due Today</span>`;
+                } else {
+                  revBadgeHtml = `<span class="schedule-due-tag tag-upcoming">R${lesson.stage} in ${diff}d (${formatDisplayDate(lesson.nextRevisionDate)})</span>`;
+                }
+              }
+
+              const hasNotes = (lesson.notes || '').trim().length > 0;
+              const historyCount = Array.isArray(lesson.history) ? lesson.history.length : 0;
+              const isDueOrOverdue = lesson.completed && lesson.status !== 'Well Retained' && diff !== null && diff <= 0;
+
+              return `
+                <tr class="lesson-row ${lesson.completed ? 'completed' : ''}" data-lesson-id="${lesson.id}">
+                  <td class="lesson-cell-check">
+                    <input type="checkbox" class="custom-checkbox chk-lesson-completion" data-lesson-id="${lesson.id}" ${lesson.completed ? 'checked' : ''} title="Mark lesson completed independently">
+                  </td>
+                  <td class="lesson-cell-main">
+                    <div class="lesson-title-line">
+                      <span class="lesson-title-text">${escapeHtml(lesson.title)}</span>
+                      ${lesson.dayRange ? `<span class="badge badge-neutral" style="font-size: 0.72rem;">${escapeHtml(lesson.dayRange)}</span>` : ''}
+                      ${lesson.practicalDone ? `<span class="badge badge-practical-done" style="font-size: 0.7rem;">💻 Practical Done</span>` : ''}
+                    </div>
+                    <div class="lesson-meta-line">
+                      ${lesson.completed ? `<span class="lesson-meta-item">Completed: ${formatDisplayDate(lesson.completedDate)}</span><span>•</span>` : ''}
+                      <span class="lesson-meta-item">${revBadgeHtml}</span>
+                      ${hasNotes ? `<span>•</span><span class="lesson-meta-item text-muted" title="${escapeHtml(lesson.notes)}">📝 Notes saved</span>` : ''}
+                    </div>
+                  </td>
+                  <td class="lesson-cell-actions">
+                    <div class="lesson-actions-wrap">
+                      <button type="button" class="btn-practical-toggle ${lesson.practicalDone ? 'active' : ''}" data-lesson-id="${lesson.id}" title="Toggle hands-on practical coding completion">
+                        ${lesson.practicalDone ? '✓ Practical' : '+ Practical'}
+                      </button>
+                      <button type="button" class="btn btn-secondary btn-sm btn-lesson-details" data-lesson-id="${lesson.id}" title="View lesson details & personal notes">
+                        ${hasNotes ? 'Notes ✓' : 'Notes'}
+                      </button>
+                      <button type="button" class="btn btn-secondary btn-sm btn-lesson-history" data-lesson-id="${lesson.id}" title="View revision history (${historyCount})">
+                        Hist (${historyCount})
+                      </button>
+                      ${lesson.completed && lesson.status !== 'Well Retained' ? `
+                        <button type="button" class="btn btn-sm ${isDueOrOverdue ? 'btn-primary' : 'btn-secondary'} btn-lesson-revise" data-lesson-id="${lesson.id}" title="Revise this concept now">
+                          Revise R${lesson.stage || 1} →
+                        </button>
+                      ` : ''}
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    container.appendChild(phaseCard);
+  });
+
+  // Meta count & filter summary
+  const tableCountEl = document.getElementById('course-table-count');
+  if (tableCountEl) {
+    tableCountEl.textContent = `Showing ${visibleLessonsCount} of ${totalLessons} lessons`;
+  }
+  const filterSummaryEl = document.getElementById('course-filter-summary');
+  if (filterSummaryEl) {
+    const parts = [];
+    if (phaseFilter !== 'ALL') parts.push(`Phase ${phaseFilter}`);
+    if (statusFilter !== 'ALL') parts.push(`Status: ${statusFilter}`);
+    if (searchQ) parts.push(`Search: "${searchQ}"`);
+    filterSummaryEl.textContent = parts.length > 0 ? parts.join(', ') : 'No filters applied';
+  }
+}
+
+/**
+ * Render Section 3: Revision Queue (Unified DSA + Course Concepts)
  */
 function renderRevisionQueue() {
-  const { due, overdue, upcoming, todayStr } = getQueueCategorizedProblems();
+  const uQueue = getUnifiedRevisionQueue();
+  const todayStr = uQueue.todayStr;
 
-  // Banner counts
-  document.getElementById('queue-banner-due-count').textContent = due.length;
-  document.getElementById('queue-banner-overdue-count').textContent = overdue.length;
-  document.getElementById('queue-banner-upcoming-count').textContent = upcoming.length;
+  // 1. Update Category Filter Buttons Active State & Counts
+  document.querySelectorAll('.category-pill-btn').forEach(btn => {
+    const cat = btn.getAttribute('data-queue-cat');
+    btn.classList.toggle('active', cat === AppState.currentQueueCategory);
+  });
+  const bAll = document.getElementById('badge-cat-all');
+  const bDsa = document.getElementById('badge-cat-dsa');
+  const bCourse = document.getElementById('badge-cat-course');
+  if (bAll) bAll.textContent = uQueue.counts.all;
+  if (bDsa) bDsa.textContent = uQueue.counts.dsa;
+  if (bCourse) bCourse.textContent = uQueue.counts.course;
 
-  // Sub-tab counts
-  document.getElementById('badge-due-count').textContent = due.length;
-  document.getElementById('badge-overdue-count').textContent = overdue.length;
-  document.getElementById('badge-upcoming-count').textContent = upcoming.length;
+  // 2. Banner counts (for currently filtered items)
+  document.getElementById('queue-banner-due-count').textContent = uQueue.due.length;
+  document.getElementById('queue-banner-overdue-count').textContent = uQueue.overdue.length;
+  document.getElementById('queue-banner-upcoming-count').textContent = uQueue.upcoming.length;
+  const bannerRetained = document.getElementById('queue-banner-retained-count');
+  if (bannerRetained) bannerRetained.textContent = uQueue.retained.length;
+
+  // 3. Sub-tab counts
+  document.getElementById('badge-due-count').textContent = uQueue.due.length;
+  document.getElementById('badge-overdue-count').textContent = uQueue.overdue.length;
+  document.getElementById('badge-upcoming-count').textContent = uQueue.upcoming.length;
+  const badgeRetained = document.getElementById('badge-retained-count');
+  if (badgeRetained) badgeRetained.textContent = uQueue.retained.length;
+
+  // Highlight active sub-tab
+  document.querySelectorAll('.queue-nav-tabs .sub-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.getAttribute('data-queue-group') === AppState.currentQueueFilter);
+  });
 
   const container = document.getElementById('queue-cards-container');
   const emptyState = document.getElementById('queue-empty-state');
@@ -1038,11 +2047,13 @@ function renderRevisionQueue() {
 
   let activeList = [];
   if (AppState.currentQueueFilter === 'due') {
-    activeList = due;
+    activeList = uQueue.due;
   } else if (AppState.currentQueueFilter === 'overdue') {
-    activeList = overdue;
+    activeList = uQueue.overdue;
   } else if (AppState.currentQueueFilter === 'upcoming') {
-    activeList = upcoming;
+    activeList = uQueue.upcoming;
+  } else if (AppState.currentQueueFilter === 'retained') {
+    activeList = uQueue.retained;
   }
 
   if (activeList.length === 0) {
@@ -1052,46 +2063,98 @@ function renderRevisionQueue() {
     if (emptyState) emptyState.style.display = 'none';
   }
 
-  activeList.forEach(prob => {
+  activeList.forEach(wrapper => {
     const card = document.createElement('div');
     card.className = 'queue-card';
 
-    const diff = getDaysDifference(prob.nextRevisionDate, todayStr);
-    let dueTagHtml = '';
-    if (diff < 0) {
-      dueTagHtml = `<span class="schedule-due-tag tag-overdue">${Math.abs(diff)}d overdue</span>`;
-    } else if (diff === 0) {
-      dueTagHtml = `<span class="schedule-due-tag tag-due">Due Today</span>`;
-    } else {
-      dueTagHtml = `<span class="schedule-due-tag tag-upcoming">In ${diff}d (${formatDisplayDate(prob.nextRevisionDate)})</span>`;
-    }
+    if (wrapper.type === 'dsa') {
+      const prob = wrapper.data;
+      const diff = prob.nextRevisionDate ? getDaysDifference(prob.nextRevisionDate, todayStr) : null;
+      let dueTagHtml = '';
+      if (prob.status === 'Well Retained') {
+        dueTagHtml = `<span class="badge diff-easy">★ Well Retained</span>`;
+      } else if (diff !== null) {
+        if (diff < 0) {
+          dueTagHtml = `<span class="schedule-due-tag tag-overdue">${Math.abs(diff)}d overdue</span>`;
+        } else if (diff === 0) {
+          dueTagHtml = `<span class="schedule-due-tag tag-due">Due Today</span>`;
+        } else {
+          dueTagHtml = `<span class="schedule-due-tag tag-upcoming">In ${diff}d (${formatDisplayDate(prob.nextRevisionDate)})</span>`;
+        }
+      }
 
-    card.innerHTML = `
-      <div class="queue-card-top">
-        <div>
-          <div class="queue-card-title">${escapeHtml(prob.title)}</div>
-          <div class="queue-card-badges">
-            <span class="badge badge-neutral">${escapeHtml(prob.topic)}</span>
-            <span class="badge ${getDifficultyBadgeClass(prob.difficulty)}">${prob.difficulty}</span>
-            <span class="badge badge-neutral">${escapeHtml(prob.platform || 'LeetCode')}</span>
+      card.innerHTML = `
+        <div class="queue-card-top">
+          <div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;">
+              <span class="pillar-tag dsa-tag" style="font-size: 0.7rem; padding: 1px 6px;">DSA Problem</span>
+              <span class="badge badge-neutral">${escapeHtml(prob.topic)}</span>
+              <span class="badge ${getDifficultyBadgeClass(prob.difficulty)}">${prob.difficulty}</span>
+              <span class="badge badge-neutral">${escapeHtml(prob.platform || 'LeetCode')}</span>
+            </div>
+            <div class="queue-card-title">${escapeHtml(prob.title)}</div>
           </div>
         </div>
-      </div>
 
-      <div class="queue-card-meta">
-        <div><strong>Solved Date:</strong> ${formatDisplayDate(prob.solvedDate)}</div>
-        <div><strong>Scheduled Stage:</strong> Revision ${prob.stage || 1} (${SP_INTERVALS[prob.stage || 1] || 1} day interval)</div>
-        <div><strong>Scheduled Date:</strong> ${formatDisplayDate(prob.nextRevisionDate)}</div>
-      </div>
-
-      <div class="queue-card-footer">
-        ${dueTagHtml}
-        <div style="display: flex; gap: 6px;">
-          <button class="btn btn-secondary btn-sm btn-queue-details" data-id="${prob.id}">Details</button>
-          <button class="btn btn-primary btn-sm btn-queue-revise" data-id="${prob.id}">Revise Now →</button>
+        <div class="queue-card-meta">
+          <div><strong>Solved Date:</strong> ${formatDisplayDate(prob.solvedDate)}</div>
+          <div><strong>Scheduled Stage:</strong> Revision ${prob.stage || 1} (${SP_INTERVALS[prob.stage || 1] || 1}d interval)</div>
+          <div><strong>Scheduled Date:</strong> ${formatDisplayDate(prob.nextRevisionDate)}</div>
         </div>
-      </div>
-    `;
+
+        <div class="queue-card-footer">
+          ${dueTagHtml}
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary btn-sm btn-queue-details" data-id="${prob.id}">Details</button>
+            ${prob.status !== 'Well Retained' ? `<button class="btn btn-primary btn-sm btn-queue-revise" data-id="${prob.id}">Revise Now →</button>` : ''}
+          </div>
+        </div>
+      `;
+    } else {
+      // Course Concept Card
+      const lesson = wrapper.data;
+      const diff = lesson.nextRevisionDate ? getDaysDifference(lesson.nextRevisionDate, todayStr) : null;
+      let dueTagHtml = '';
+      if (lesson.status === 'Well Retained') {
+        dueTagHtml = `<span class="badge diff-easy">★ Well Retained</span>`;
+      } else if (diff !== null) {
+        if (diff < 0) {
+          dueTagHtml = `<span class="schedule-due-tag tag-overdue">R${lesson.stage} Overdue (${Math.abs(diff)}d)</span>`;
+        } else if (diff === 0) {
+          dueTagHtml = `<span class="schedule-due-tag tag-due">R${lesson.stage} Due Today</span>`;
+        } else {
+          dueTagHtml = `<span class="schedule-due-tag tag-upcoming">R${lesson.stage} in ${diff}d (${formatDisplayDate(lesson.nextRevisionDate)})</span>`;
+        }
+      }
+
+      card.innerHTML = `
+        <div class="queue-card-top">
+          <div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap;">
+              <span class="pillar-tag java-tag" style="font-size: 0.7rem; padding: 1px 6px;">Java / Spring Boot</span>
+              <span class="badge badge-neutral">Phase ${lesson.phaseNumber || 1}</span>
+              ${lesson.dayRange ? `<span class="badge badge-neutral">${escapeHtml(lesson.dayRange)}</span>` : ''}
+              ${lesson.practicalDone ? `<span class="badge badge-practical-done" style="font-size: 0.7rem;">💻 Practical Done</span>` : ''}
+            </div>
+            <div class="queue-card-title">${escapeHtml(lesson.title)}</div>
+          </div>
+        </div>
+
+        <div class="queue-card-meta">
+          <div><strong>Completed Date:</strong> ${formatDisplayDate(lesson.completedDate)}</div>
+          <div><strong>Revision Stage:</strong> Revision ${lesson.stage || 1} of 3 (${COURSE_SP_INTERVALS[lesson.stage || 1] || 1}d interval)</div>
+          <div><strong>Scheduled Date:</strong> ${formatDisplayDate(lesson.nextRevisionDate)}</div>
+        </div>
+
+        <div class="queue-card-footer">
+          ${dueTagHtml}
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-secondary btn-sm btn-queue-concept-details" data-id="${lesson.id}">Details / Notes</button>
+            ${lesson.status !== 'Well Retained' ? `<button class="btn btn-primary btn-sm btn-queue-concept-revise" data-id="${lesson.id}">Revise Concept →</button>` : ''}
+          </div>
+        </div>
+      `;
+    }
 
     container.appendChild(card);
   });
@@ -1157,6 +2220,19 @@ function renderThreePillars() {
     chkJava.checked = !!dayRecord.java.done;
     taskJava.value = dayRecord.java.task || '';
     boxJava.classList.toggle('completed', !!dayRecord.java.done);
+  }
+
+  // Update Pillar 2 EmbarkX Course Progress Bar & Stat
+  const completedLessons = AppState.courseLessons.filter(l => l.completed).length;
+  const totalCourseLessons = AppState.courseLessons.length || 50;
+  const coursePct = totalCourseLessons > 0 ? Math.round((completedLessons / totalCourseLessons) * 100) : 0;
+  const courseStatText = document.getElementById('pillar-course-stat-text');
+  const courseMiniBar = document.getElementById('pillar-course-mini-bar');
+  if (courseStatText) {
+    courseStatText.textContent = `${completedLessons} / ${totalCourseLessons} Lessons Completed (${coursePct}%)`;
+  }
+  if (courseMiniBar) {
+    courseMiniBar.style.width = `${coursePct}%`;
   }
 
   if (chkSw360 && taskSw360 && boxSw360) {
@@ -1649,6 +2725,164 @@ function deleteProblem(problemId, confirmFirst = true) {
 
 window.deleteProblem = deleteProblem;
 
+// =============================================================================
+// 7.1 COURSE CONCEPT MODALS (REVISE & DETAILS)
+// =============================================================================
+
+function openConceptReviseModal(lessonId) {
+  const lesson = AppState.courseLessons.find(l => l.id === lessonId);
+  if (!lesson) return;
+
+  AppState.activeLessonForRevision = lesson;
+
+  const modal = document.getElementById('modal-concept-revise');
+  if (!modal) return;
+
+  document.getElementById('concept-revise-lesson-id').value = lesson.id;
+  document.getElementById('concept-revise-title').textContent = lesson.title;
+  document.getElementById('concept-revise-phase-badge').textContent = `Phase ${lesson.phaseNumber || 1}`;
+  document.getElementById('concept-revise-day-badge').textContent = lesson.dayRange || 'Day N/A';
+  document.getElementById('concept-revise-stage-badge').textContent = `Revision ${lesson.stage || 1}`;
+
+  const practicalBadge = document.getElementById('concept-revise-practical-badge');
+  if (practicalBadge) {
+    practicalBadge.textContent = lesson.practicalDone ? '💻 Practical Done' : 'Practical Pending';
+    practicalBadge.className = `badge ${lesson.practicalDone ? 'badge-practical-done' : 'badge-neutral'}`;
+  }
+
+  // Spaced recall interval description
+  const intervalDescEl = document.getElementById('concept-revise-interval-desc');
+  if (intervalDescEl) {
+    if (lesson.stage === 1) {
+      intervalDescEl.innerHTML = `<strong>R1 (1-Day Interval):</strong> Recall and reconstruct key architectural concepts & annotations 1 day after learning.<br>Completing this schedules <strong>R2 in 3 days</strong>.`;
+    } else if (lesson.stage === 2) {
+      intervalDescEl.innerHTML = `<strong>R2 (3-Day Interval):</strong> Consolidate concept retention and verify hands-on execution.<br>Completing this schedules <strong>R3 in 7 days</strong>.`;
+    } else if (lesson.stage >= 3) {
+      intervalDescEl.innerHTML = `<strong>R3 (7-Day Interval):</strong> Final spaced recall verification.<br>Completing this marks the concept <strong>Well Retained</strong>!`;
+    }
+  }
+
+  // Saved lesson notes
+  const notesBox = document.getElementById('concept-revise-notes-box');
+  const notesText = document.getElementById('concept-revise-notes-text');
+  if (notesBox && notesText) {
+    if ((lesson.notes || '').trim()) {
+      notesText.textContent = lesson.notes;
+      notesBox.style.display = 'block';
+    } else {
+      notesBox.style.display = 'none';
+    }
+  }
+
+  const logNotesInput = document.getElementById('concept-revise-log-notes');
+  if (logNotesInput) logNotesInput.value = '';
+
+  modal.style.display = 'flex';
+}
+
+function closeConceptReviseModal() {
+  const modal = document.getElementById('modal-concept-revise');
+  if (modal) modal.style.display = 'none';
+  AppState.activeLessonForRevision = null;
+}
+
+function openConceptDetailsModal(lessonId) {
+  const lesson = AppState.courseLessons.find(l => l.id === lessonId);
+  if (!lesson) return;
+
+  AppState.activeLessonForDetails = lesson;
+
+  const modal = document.getElementById('modal-concept-details');
+  if (!modal) return;
+
+  document.getElementById('concept-details-lesson-id').value = lesson.id;
+  document.getElementById('concept-details-phase-pretitle').textContent = lesson.phaseTitle || `Phase ${lesson.phaseNumber || 1}`;
+  document.getElementById('concept-details-title').textContent = lesson.title;
+
+  document.getElementById('concept-details-phase').textContent = `Phase ${lesson.phaseNumber || 1}`;
+  document.getElementById('concept-details-day').textContent = lesson.dayRange || 'N/A';
+  document.getElementById('concept-details-status').textContent = lesson.status || (lesson.completed ? 'Completed' : 'Pending');
+  document.getElementById('concept-details-date').textContent = lesson.completedDate ? formatDisplayDate(lesson.completedDate) : 'Not completed';
+  document.getElementById('concept-details-practical').textContent = lesson.practicalDone ? 'Done (Practical Code Completed)' : 'Pending';
+
+  const todayStr = getTodayDateString();
+  let nextRevText = 'N/A';
+  if (lesson.status === 'Well Retained') {
+    nextRevText = 'Well Retained (Passed R1, R2, R3)';
+  } else if (lesson.nextRevisionDate) {
+    const diff = getDaysDifference(lesson.nextRevisionDate, todayStr);
+    if (diff < 0) {
+      nextRevText = `${formatDisplayDate(lesson.nextRevisionDate)} (Overdue by ${Math.abs(diff)}d)`;
+    } else if (diff === 0) {
+      nextRevText = `${formatDisplayDate(lesson.nextRevisionDate)} (Due Today)`;
+    } else {
+      nextRevText = `${formatDisplayDate(lesson.nextRevisionDate)} (in ${diff} days)`;
+    }
+  }
+  document.getElementById('concept-details-next-rev').textContent = nextRevText;
+
+  // Notes textarea
+  const notesTextarea = document.getElementById('concept-details-notes-input');
+  if (notesTextarea) {
+    notesTextarea.value = lesson.notes || '';
+  }
+  const notesSaveStatus = document.getElementById('concept-notes-save-status');
+  if (notesSaveStatus) {
+    notesSaveStatus.textContent = 'Saved';
+  }
+
+  // Revision History Table
+  const tbody = document.getElementById('concept-history-tbody');
+  const countBadge = document.getElementById('concept-history-count');
+  if (tbody) {
+    tbody.innerHTML = '';
+    const historyList = Array.isArray(lesson.history) ? lesson.history : [];
+    if (countBadge) {
+      countBadge.textContent = `${historyList.length} Revision${historyList.length === 1 ? '' : 's'}`;
+    }
+
+    if (historyList.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px;">
+            No revisions recorded yet for this lesson.
+          </td>
+        </tr>
+      `;
+    } else {
+      historyList.forEach((entry, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-family: var(--font-mono); font-size: 0.8rem;">${formatDisplayDate(entry.revisionDate)}</td>
+          <td><span class="badge badge-neutral">R${entry.revisionNumber || (idx + 1)}</span></td>
+          <td><span class="badge diff-easy">${escapeHtml(entry.result || 'Completed')}</span></td>
+          <td style="font-size: 0.82rem; color: var(--text-muted);">${entry.notes ? escapeHtml(entry.notes) : '<span class="text-muted">–</span>'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  }
+
+  // Revise Now button in details modal
+  const btnReviseNow = document.getElementById('btn-concept-details-revise-now');
+  if (btnReviseNow) {
+    if (lesson.completed && lesson.status !== 'Well Retained') {
+      btnReviseNow.style.display = 'inline-block';
+      btnReviseNow.textContent = `Revise R${lesson.stage || 1} Now →`;
+    } else {
+      btnReviseNow.style.display = 'none';
+    }
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeConceptDetailsModal() {
+  const modal = document.getElementById('modal-concept-details');
+  if (modal) modal.style.display = 'none';
+  AppState.activeLessonForDetails = null;
+}
+
 /**
  * Open Backup & Restore Modal
  */
@@ -1669,11 +2903,12 @@ function closeBackupModal() {
  */
 function exportBackupJSON() {
   const backupData = {
-    version: 1,
+    version: 2,
     exportDate: new Date().toISOString(),
-    system: 'Three Pillars Daily Tracker – DSA Spaced Repetition',
+    system: 'Three Pillars Daily Tracker – DSA Spaced Repetition & EmbarkX Course Tracker',
     problems: AppState.problems,
-    pillars: AppState.pillarsData
+    pillars: AppState.pillarsData,
+    course: AppState.courseLessons
   };
 
   const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(backupData, null, 2));
@@ -1704,6 +2939,7 @@ function handleImportFile(file) {
 
       let problemsCount = 0;
       let pillarsCount = 0;
+      let courseCount = 0;
 
       // Safe restore problems
       if (Array.isArray(imported.problems)) {
@@ -1720,7 +2956,30 @@ function handleImportFile(file) {
         savePillarsToStorage();
       }
 
-      showBackupStatus(`Import complete! Restored ${problemsCount} problems and ${pillarsCount} daily logs.`, 'success');
+      // Safe restore course data
+      if (Array.isArray(imported.course)) {
+        const importedCourseMap = {};
+        imported.course.forEach(item => {
+          if (item && item.id) importedCourseMap[item.id] = item;
+        });
+        AppState.courseLessons.forEach(l => {
+          const saved = importedCourseMap[l.id];
+          if (saved) {
+            l.completed = !!saved.completed;
+            l.completedDate = saved.completedDate || null;
+            l.practicalDone = !!saved.practicalDone;
+            l.notes = saved.notes || '';
+            l.stage = typeof saved.stage === 'number' ? saved.stage : 0;
+            l.nextRevisionDate = saved.nextRevisionDate || null;
+            l.status = saved.status || (saved.completed ? 'Revising' : 'Pending');
+            l.history = Array.isArray(saved.history) ? saved.history : [];
+            courseCount++;
+          }
+        });
+        saveCourseToStorage();
+      }
+
+      showBackupStatus(`Import complete! Restored ${problemsCount} problems, ${pillarsCount} daily logs, and ${courseCount} course lessons.`, 'success');
       refreshUI();
     } catch (err) {
       console.error('Import parse error:', err);
@@ -2016,6 +3275,7 @@ function switchTab(tabName) {
   // Refresh current view
   if (tabName === 'dashboard') renderDashboard();
   if (tabName === 'dsa') renderDSATracker();
+  if (tabName === 'course') renderCourseTracker();
   if (tabName === 'queue') renderRevisionQueue();
   if (tabName === 'pillars') renderThreePillars();
 }
@@ -2065,6 +3325,8 @@ function setupEventListeners() {
   // Dashboard quick triggers
   document.getElementById('btn-jump-to-pillars')?.addEventListener('click', () => switchTab('pillars'));
   document.getElementById('btn-dash-open-queue')?.addEventListener('click', () => switchTab('queue'));
+  document.getElementById('btn-dash-open-course')?.addEventListener('click', () => switchTab('course'));
+  document.getElementById('btn-pillar-open-course')?.addEventListener('click', () => switchTab('course'));
 
   // Dashboard Pillar Checkbox Toggles
   document.getElementById('dash-check-dsa')?.addEventListener('change', (e) => {
@@ -2089,6 +3351,21 @@ function setupEventListeners() {
     AppState.pillarsData[todayStr].sw360.done = e.target.checked;
     savePillarsToStorage();
     refreshUI();
+  });
+
+  // Dashboard Phase Progress Card Click Delegation
+  document.getElementById('dash-course-phase-progress')?.addEventListener('click', (e) => {
+    const item = e.target.closest('.phase-progress-item');
+    if (item) {
+      const phaseId = parseInt(item.getAttribute('data-phase-id'), 10);
+      if (phaseId) {
+        AppState.courseFilterPhase = String(phaseId);
+        AppState.courseExpandedPhases[phaseId] = true;
+        const phaseSelect = document.getElementById('course-filter-phase');
+        if (phaseSelect) phaseSelect.value = String(phaseId);
+        switchTab('course');
+      }
+    }
   });
 
   // DSA Tracker Filters & Search
@@ -2171,30 +3448,177 @@ function setupEventListeners() {
   // Delegate Dashboard Focus List Revise
   document.getElementById('dash-focus-list')?.addEventListener('click', (e) => {
     const reviseBtn = e.target.closest('.btn-dash-revise');
+    const conceptReviseBtn = e.target.closest('.btn-dash-concept-revise');
+
     if (reviseBtn) {
       openReviseModal(reviseBtn.getAttribute('data-id'));
+    } else if (conceptReviseBtn) {
+      openConceptReviseModal(conceptReviseBtn.getAttribute('data-id'));
     }
   });
 
+  // Queue Category Filter Buttons
+  document.querySelectorAll('.category-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      AppState.currentQueueCategory = btn.getAttribute('data-queue-cat');
+      renderRevisionQueue();
+    });
+  });
+
   // Queue Sub-Tabs
-  document.querySelectorAll('.sub-tab').forEach(tab => {
+  document.querySelectorAll('.queue-nav-tabs .sub-tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.queue-nav-tabs .sub-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       AppState.currentQueueFilter = tab.getAttribute('data-queue-group');
       renderRevisionQueue();
     });
   });
 
-  // Delegate Queue Cards Revise & Details
+  // Delegate Queue Cards Revise & Details (DSA + Course Concept)
   document.getElementById('queue-cards-container')?.addEventListener('click', (e) => {
     const reviseBtn = e.target.closest('.btn-queue-revise');
     const detailsBtn = e.target.closest('.btn-queue-details');
+    const conceptReviseBtn = e.target.closest('.btn-queue-concept-revise');
+    const conceptDetailsBtn = e.target.closest('.btn-queue-concept-details');
 
     if (reviseBtn) {
       openReviseModal(reviseBtn.getAttribute('data-id'));
     } else if (detailsBtn) {
       openDetailsModal(detailsBtn.getAttribute('data-id'));
+    } else if (conceptReviseBtn) {
+      openConceptReviseModal(conceptReviseBtn.getAttribute('data-id'));
+    } else if (conceptDetailsBtn) {
+      openConceptDetailsModal(conceptDetailsBtn.getAttribute('data-id'));
+    }
+  });
+
+  // Course Search & Filters
+  const courseSearchInput = document.getElementById('course-search-input');
+  const btnClearCourseSearch = document.getElementById('btn-clear-course-search');
+
+  courseSearchInput?.addEventListener('input', (e) => {
+    AppState.courseSearchQuery = e.target.value.trim();
+    if (btnClearCourseSearch) btnClearCourseSearch.style.display = AppState.courseSearchQuery ? 'block' : 'none';
+    renderCourseTracker();
+  });
+
+  btnClearCourseSearch?.addEventListener('click', () => {
+    if (courseSearchInput) courseSearchInput.value = '';
+    AppState.courseSearchQuery = '';
+    btnClearCourseSearch.style.display = 'none';
+    renderCourseTracker();
+  });
+
+  const courseFilterPhase = document.getElementById('course-filter-phase');
+  courseFilterPhase?.addEventListener('change', (e) => {
+    AppState.courseFilterPhase = e.target.value;
+    renderCourseTracker();
+  });
+
+  const courseFilterStatus = document.getElementById('course-filter-status');
+  courseFilterStatus?.addEventListener('change', (e) => {
+    AppState.courseFilterStatus = e.target.value;
+    renderCourseTracker();
+  });
+
+  document.getElementById('btn-reset-course-filters')?.addEventListener('click', () => {
+    if (courseSearchInput) courseSearchInput.value = '';
+    if (btnClearCourseSearch) btnClearCourseSearch.style.display = 'none';
+    if (courseFilterPhase) courseFilterPhase.value = 'ALL';
+    if (courseFilterStatus) courseFilterStatus.value = 'ALL';
+
+    AppState.courseSearchQuery = '';
+    AppState.courseFilterPhase = 'ALL';
+    AppState.courseFilterStatus = 'ALL';
+
+    renderCourseTracker();
+  });
+
+  document.getElementById('btn-course-expand-all')?.addEventListener('click', () => {
+    EMBARKX_COURSE_TEMPLATE.forEach(p => {
+      AppState.courseExpandedPhases[p.phaseId] = true;
+    });
+    renderCourseTracker();
+  });
+
+  document.getElementById('btn-course-collapse-all')?.addEventListener('click', () => {
+    AppState.courseExpandedPhases = {};
+    renderCourseTracker();
+  });
+
+  // Course Phases Accordion & Lesson Actions Delegation
+  document.getElementById('course-phases-container')?.addEventListener('click', (e) => {
+    const headerBtn = e.target.closest('[data-toggle-phase]');
+    const practicalBtn = e.target.closest('.btn-practical-toggle');
+    const detailsBtn = e.target.closest('.btn-lesson-details');
+    const historyBtn = e.target.closest('.btn-lesson-history');
+    const reviseBtn = e.target.closest('.btn-lesson-revise');
+
+    if (headerBtn) {
+      const phaseId = parseInt(headerBtn.getAttribute('data-toggle-phase'), 10);
+      AppState.courseExpandedPhases[phaseId] = !AppState.courseExpandedPhases[phaseId];
+      const card = headerBtn.closest('.phase-accordion-card');
+      if (card) card.classList.toggle('open', !!AppState.courseExpandedPhases[phaseId]);
+    } else if (practicalBtn) {
+      e.stopPropagation();
+      const lessonId = practicalBtn.getAttribute('data-lesson-id');
+      toggleLessonPractical(lessonId);
+    } else if (detailsBtn) {
+      e.stopPropagation();
+      const lessonId = detailsBtn.getAttribute('data-lesson-id');
+      openConceptDetailsModal(lessonId);
+    } else if (historyBtn) {
+      e.stopPropagation();
+      const lessonId = historyBtn.getAttribute('data-lesson-id');
+      openConceptDetailsModal(lessonId);
+    } else if (reviseBtn) {
+      e.stopPropagation();
+      const lessonId = reviseBtn.getAttribute('data-lesson-id');
+      openConceptReviseModal(lessonId);
+    }
+  });
+
+  document.getElementById('course-phases-container')?.addEventListener('change', (e) => {
+    const chk = e.target.closest('.chk-lesson-completion');
+    if (chk) {
+      const lessonId = chk.getAttribute('data-lesson-id');
+      toggleLessonCompletion(lessonId, chk.checked);
+    }
+  });
+
+  // Concept Revision Modal Handlers
+  document.getElementById('btn-close-concept-revise')?.addEventListener('click', closeConceptReviseModal);
+  document.getElementById('btn-cancel-concept-revise')?.addEventListener('click', closeConceptReviseModal);
+  document.getElementById('btn-submit-concept-revise')?.addEventListener('click', () => {
+    const lessonId = document.getElementById('concept-revise-lesson-id').value;
+    const notes = document.getElementById('concept-revise-log-notes').value;
+    if (lessonId) {
+      recordConceptRevision(lessonId, notes);
+      closeConceptReviseModal();
+    }
+  });
+
+  // Concept Details Modal Handlers
+  document.getElementById('btn-close-concept-details')?.addEventListener('click', closeConceptDetailsModal);
+  document.getElementById('btn-concept-details-save-notes')?.addEventListener('click', () => {
+    const lessonId = document.getElementById('concept-details-lesson-id').value;
+    const notes = document.getElementById('concept-details-notes-input').value;
+    if (lessonId) {
+      saveLessonNotes(lessonId, notes);
+      const saveStatus = document.getElementById('concept-notes-save-status');
+      if (saveStatus) {
+        saveStatus.textContent = 'Saved!';
+        setTimeout(() => { saveStatus.textContent = 'Saved'; }, 1500);
+      }
+      refreshUI();
+    }
+  });
+  document.getElementById('btn-concept-details-revise-now')?.addEventListener('click', () => {
+    const lessonId = document.getElementById('concept-details-lesson-id').value;
+    if (lessonId) {
+      closeConceptDetailsModal();
+      openConceptReviseModal(lessonId);
     }
   });
 

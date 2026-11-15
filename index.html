@@ -42,6 +42,10 @@
       <button class="nav-tab" data-tab="dsa">
         <span>DSA Tracker</span>
       </button>
+      <button class="nav-tab" data-tab="course">
+        <span>Java / Spring Boot</span>
+        <span class="nav-badge" id="nav-course-badge" style="display: none;">0</span>
+      </button>
       <button class="nav-tab" data-tab="queue">
         <span>Revision Queue</span>
         <span class="nav-badge" id="nav-queue-badge" style="display: none;">0</span>
@@ -102,6 +106,14 @@
           </div>
         </div>
 
+        <!-- Pillar 1 Metrics Section Header -->
+        <div class="dash-section-header">
+          <div class="dash-section-title-wrap">
+            <span class="pillar-tag dsa-tag">Pillar 1</span>
+            <h3 class="dash-section-title">DSA – Striver A2Z Spaced Repetition</h3>
+          </div>
+        </div>
+
         <!-- Metrics Grid -->
         <div class="metrics-grid">
           <div class="metric-card">
@@ -134,6 +146,81 @@
               <span class="metric-value" id="stat-well-retained">0</span>
               <span class="metric-sub">Passed 5 Revisions</span>
             </div>
+          </div>
+        </div>
+
+        <!-- Pillar 2: Course Progress & Concepts Metrics -->
+        <div class="dash-section-header" style="margin-top: 20px;">
+          <div class="dash-section-title-wrap">
+            <span class="pillar-tag java-tag">Pillar 2</span>
+            <h3 class="dash-section-title">EmbarkX Java / Spring Boot Course</h3>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btn-dash-open-course">Open Course Tracker →</button>
+        </div>
+
+        <div class="metrics-grid course-metrics-grid">
+          <div class="metric-card">
+            <span class="metric-label">Course Lessons</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-course-total">50</span>
+              <span class="metric-sub">10 Phases (72 Days)</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-success">
+            <span class="metric-label">Lessons Completed</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-course-completed">0</span>
+              <span class="metric-sub" id="stat-course-rate">0% Done</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Lessons Pending</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-course-pending">50</span>
+              <span class="metric-sub">Remaining</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-due">
+            <span class="metric-label">Revisions Due Today</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-course-due">0</span>
+              <span class="metric-sub">Concept Recall</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-overdue">
+            <span class="metric-label">Overdue Concept Revisions</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-course-overdue">0</span>
+              <span class="metric-sub">Need Review</span>
+            </div>
+          </div>
+
+          <div class="metric-card highlight-mastered">
+            <span class="metric-label">Concepts Well Retained</span>
+            <div class="metric-value-wrap">
+              <span class="metric-value" id="stat-course-retained">0</span>
+              <span class="metric-sub">Passed R3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Progress: Phase-wise Completion Percentages -->
+        <div class="card course-progress-card">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Course Progress by Phase</h3>
+              <p class="card-desc">Phase-wise completion percentages across the 10 EmbarkX phases</p>
+            </div>
+            <div class="phase-progress-summary-pill">
+              <span id="dash-phase-progress-summary">0 / 50 Lessons Completed (0%)</span>
+            </div>
+          </div>
+          <div class="phase-progress-grid" id="dash-course-phase-progress">
+            <!-- Populated via script.js -->
           </div>
         </div>
 
@@ -285,6 +372,122 @@
         </div>
       </section>
 
+      <!-- ================= SECTION: EMBARKX COURSE TRACKER ================= -->
+      <section id="section-course" class="content-section">
+        <!-- Course Header & Search/Filter Toolbar -->
+        <div class="tracker-header card">
+          <div class="card-header-flex" style="margin-bottom: 12px;">
+            <div>
+              <div class="dash-section-title-wrap">
+                <span class="pillar-tag java-tag">Pillar 2</span>
+                <h2 class="card-title">EmbarkX Spring Boot Full Stack Course Tracker</h2>
+              </div>
+              <p class="card-desc">72-Day Structured Study Plan across 10 Phases with Spaced Repetition (R1 → R2 → R3 → Well Retained)</p>
+            </div>
+            <div class="course-header-actions">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-course-expand-all">Expand All</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-course-collapse-all">Collapse All</button>
+            </div>
+          </div>
+
+          <div class="tracker-toolbar">
+            <div class="search-input-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="course-search-input" class="form-control" placeholder="Search lessons by title, day range, or concepts...">
+              <button class="btn-clear-search" id="btn-clear-course-search" title="Clear search">✕</button>
+            </div>
+
+            <div class="filter-controls">
+              <select id="course-filter-phase" class="form-select">
+                <option value="ALL">All 10 Phases</option>
+                <option value="1">Phase 1: Backend Fundamentals (Days 1–12)</option>
+                <option value="2">Phase 2: Database & Persistence (Days 13–18)</option>
+                <option value="3">Phase 3: Advanced Backend (Days 19–25)</option>
+                <option value="4">Phase 4: E-commerce Backend (Days 26–30)</option>
+                <option value="5">Phase 5: Backend Completion (Days 31–32)</option>
+                <option value="6">Phase 6: React Fundamentals (Days 33–40)</option>
+                <option value="7">Phase 7: Advanced React (Days 41–48)</option>
+                <option value="8">Phase 8: Full-stack Integration (Days 49–65)</option>
+                <option value="9">Phase 9: Admin & Seller Panels (Days 66–69)</option>
+                <option value="10">Phase 10: AI Integration & Deployment (Days 70–72)</option>
+              </select>
+
+              <select id="course-filter-status" class="form-select">
+                <option value="ALL">All Lesson Statuses</option>
+                <option value="completed">Completed Lessons</option>
+                <option value="pending">Pending Lessons</option>
+                <option value="practical">Practical Coding Done</option>
+                <option value="revising">Revising (R1/R2/R3 Active)</option>
+                <option value="due">Revision Due Today</option>
+                <option value="overdue">Revision Overdue</option>
+                <option value="retained">Well Retained</option>
+              </select>
+
+              <button class="btn btn-ghost btn-sm" id="btn-reset-course-filters">Reset Filters</button>
+            </div>
+          </div>
+
+          <div class="tracker-meta-bar">
+            <div class="tracker-meta-left">
+              <span class="meta-count" id="course-table-count">Showing 50 lessons</span>
+              <span class="meta-dot">•</span>
+              <span class="meta-tag" id="course-filter-summary">No filters applied</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Course Progress Banner Card -->
+        <div class="card course-overview-card">
+          <div class="course-overview-grid">
+            <div class="course-stat-box">
+              <span class="course-stat-label">Total Course Lessons</span>
+              <div class="metric-value-wrap">
+                <span class="course-stat-value" id="course-total-lessons">50</span>
+                <span class="course-stat-sub">10 Phases (72 Days)</span>
+              </div>
+            </div>
+            <div class="course-stat-box highlight-success">
+              <span class="course-stat-label">Lessons Completed</span>
+              <div class="metric-value-wrap">
+                <span class="course-stat-value" id="course-completed-lessons">0</span>
+                <span class="course-stat-sub" id="course-completion-rate">0% Complete</span>
+              </div>
+            </div>
+            <div class="course-stat-box">
+              <span class="course-stat-label">Lessons Pending</span>
+              <div class="metric-value-wrap">
+                <span class="course-stat-value" id="course-pending-lessons">50</span>
+                <span class="course-stat-sub">Remaining</span>
+              </div>
+            </div>
+            <div class="course-stat-box highlight-info">
+              <span class="course-stat-label">Practical Done</span>
+              <div class="metric-value-wrap">
+                <span class="course-stat-value" id="course-practical-count">0</span>
+                <span class="course-stat-sub">Hands-on Code</span>
+              </div>
+            </div>
+            <div class="course-stat-box highlight-mastered">
+              <span class="course-stat-label">Well Retained</span>
+              <div class="metric-value-wrap">
+                <span class="course-stat-value" id="course-retained-lessons">0</span>
+                <span class="course-stat-sub">Passed R3</span>
+              </div>
+            </div>
+          </div>
+          <div class="course-progress-bar-wrap">
+            <div class="progress-bar-outer">
+              <div class="progress-bar-inner" id="course-overall-progress-bar" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 Phases Accordion Container -->
+        <div class="course-phases-container" id="course-phases-container">
+          <!-- Populated via script.js -->
+        </div>
+      </section>
+
       <!-- ================= SECTION 3: REVISION QUEUE ================= -->
       <section id="section-queue" class="content-section">
         <!-- Prominent Queue Summary Header -->
@@ -302,12 +505,33 @@
               <span class="queue-stat-num" id="queue-banner-upcoming-count">0</span>
               <span class="queue-stat-title">Next 7 Days</span>
             </div>
+            <div class="queue-stat-pill retained-stat">
+              <span class="queue-stat-num" id="queue-banner-retained-count">0</span>
+              <span class="queue-stat-title">Well Retained</span>
+            </div>
           </div>
           <div class="queue-banner-right">
             <p class="queue-banner-note">
               <strong>Spaced Repetition Intervals:</strong><br>
-              R1 (1d) → R2 (3d) → R3 (7d) → R4 (14d) → R5 (30d) → Well Retained
+              DSA: R1 (1d) → R2 (3d) → R3 (7d) → R4 (14d) → R5 (30d) → Well Retained<br>
+              Course: R1 (1d) → R2 (3d) → R3 (7d) → Well Retained
             </p>
+          </div>
+        </div>
+
+        <!-- Queue Category Filter Bar -->
+        <div class="queue-category-bar card">
+          <div class="queue-category-group">
+            <span class="queue-category-label">Category:</span>
+            <button type="button" class="category-pill-btn active" data-queue-cat="all">
+              All Items <span class="pill-count" id="badge-cat-all">0</span>
+            </button>
+            <button type="button" class="category-pill-btn" data-queue-cat="dsa">
+              DSA Problems <span class="pill-count" id="badge-cat-dsa">0</span>
+            </button>
+            <button type="button" class="category-pill-btn" data-queue-cat="course">
+              Java / Spring Boot <span class="pill-count" id="badge-cat-course">0</span>
+            </button>
           </div>
         </div>
 
@@ -324,6 +548,10 @@
           <button class="sub-tab" data-queue-group="upcoming">
             Upcoming (Next 7 Days)
             <span class="sub-badge neutral-badge" id="badge-upcoming-count">0</span>
+          </button>
+          <button class="sub-tab" data-queue-group="retained">
+            Well Retained
+            <span class="sub-badge retained-badge" id="badge-retained-count">0</span>
           </button>
         </div>
 
@@ -380,17 +608,30 @@
                   </div>
                 </div>
 
-                <!-- Pillar 2: Java / Spring Boot -->
-                <div class="pillar-item-box" id="pitem-java">
+                <!-- Pillar 2: Java / Spring Boot (EmbarkX Course Tracker) -->
+                <div class="pillar-item-box pillar-item-course" id="pitem-java">
                   <div class="pitem-top">
                     <label class="custom-checkbox-label">
                       <input type="checkbox" id="chk-pillar-java" class="custom-checkbox lg-check">
                       <span class="pitem-title">Pillar 2: Java / Spring Boot</span>
                     </label>
-                    <span class="pillar-tag java-tag">Mosh Course</span>
+                    <span class="pillar-tag java-tag">EmbarkX 72-Day Course</span>
                   </div>
                   <div class="pitem-content">
-                    <input type="text" id="input-pillar-java-task" class="form-control form-control-sm" placeholder="e.g. Mosh Section 4 - Dependency Injection & Services">
+                    <div class="pillar-course-status-row">
+                      <div class="pillar-course-info">
+                        <span class="pillar-course-label" id="pillar-course-stat-text">0 / 50 Lessons Completed (0%)</span>
+                        <div class="progress-bar-outer" style="height: 6px; margin: 4px 0 6px;">
+                          <div class="progress-bar-inner" id="pillar-course-mini-bar" style="width: 0%;"></div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-secondary btn-sm" id="btn-pillar-open-course">
+                        Full Course Tracker →
+                      </button>
+                    </div>
+                    <div class="pillar-course-active-lesson-box" id="pillar-course-active-box">
+                      <input type="text" id="input-pillar-java-task" class="form-control form-control-sm" placeholder="e.g. Phase 1: Spring Framework Annotations & Controllers">
+                    </div>
                   </div>
                 </div>
 
@@ -851,6 +1092,127 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-ghost" id="btn-cancel-delete">Cancel</button>
         <button type="button" class="btn btn-danger" id="btn-confirm-delete">Delete Problem</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. COURSE CONCEPT REVISION MODAL -->
+  <div class="modal-backdrop" id="modal-concept-revise" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-pretitle">Concept Active Recall (Spaced Repetition)</div>
+          <h3 class="modal-title" id="concept-revise-title">Lesson Title</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-concept-revise">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="concept-revise-lesson-id">
+        <div class="revise-meta-strip">
+          <span class="badge java-tag" id="concept-revise-phase-badge">Phase 1</span>
+          <span class="badge badge-neutral" id="concept-revise-day-badge">Day 1 - Day 2</span>
+          <span class="badge diff-medium" id="concept-revise-stage-badge">Revision 1</span>
+          <span class="badge badge-neutral" id="concept-revise-practical-badge">Practical Pending</span>
+        </div>
+
+        <div class="recall-prompt-card" style="margin-top: 14px;">
+          <h4 class="recall-prompt-heading">Spaced Recall Interval</h4>
+          <p class="recall-prompt-sub" id="concept-revise-interval-desc">
+            R1: 1 day after learning completion.<br>
+            Complete this revision to schedule R2 (in 3 days).
+          </p>
+          <div class="recall-notes-box" id="concept-revise-notes-box" style="display: none; margin-top: 10px;">
+            <span class="notes-caption">Saved Lesson Notes:</span>
+            <p id="concept-revise-notes-text"></p>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 16px;">
+          <label class="form-label" for="concept-revise-log-notes">Revision Reflections & Key Takeaways (Optional):</label>
+          <textarea id="concept-revise-log-notes" class="form-control" rows="3" placeholder="What key concepts did you recall? Any annotations, patterns, or architecture reviewed?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-concept-revise">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-submit-concept-revise">✓ Complete Revision</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. COURSE CONCEPT DETAILS & HISTORY MODAL -->
+  <div class="modal-backdrop" id="modal-concept-details" style="display: none;">
+    <div class="modal-dialog modal-dialog-lg">
+      <div class="modal-header">
+        <div>
+          <div class="modal-pretitle" id="concept-details-phase-pretitle">Phase 1: Backend Fundamentals</div>
+          <h3 class="modal-title" id="concept-details-title">Lesson Title</h3>
+        </div>
+        <button class="btn-close-modal" id="btn-close-concept-details">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="concept-details-lesson-id">
+        <div class="details-top-grid">
+          <div class="details-field">
+            <span class="details-label">Phase</span>
+            <span class="details-value" id="concept-details-phase">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Day Schedule</span>
+            <span class="details-value" id="concept-details-day">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Completion Status</span>
+            <span class="details-value" id="concept-details-status">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Completed Date</span>
+            <span class="details-value" id="concept-details-date">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Practical Coding</span>
+            <span class="details-value" id="concept-details-practical">-</span>
+          </div>
+          <div class="details-field">
+            <span class="details-label">Next Revision</span>
+            <span class="details-value" id="concept-details-next-rev">-</span>
+          </div>
+        </div>
+
+        <!-- Personal Notes Section -->
+        <div class="details-section" style="margin-top: 16px;">
+          <div class="card-header-flex">
+            <h4 class="details-heading">Personal Lesson Notes</h4>
+            <span class="save-status-text" id="concept-notes-save-status">Saved</span>
+          </div>
+          <textarea id="concept-details-notes-input" class="form-control" rows="3" placeholder="Enter key notes, concepts, commands, or takeaways for this lesson..."></textarea>
+        </div>
+
+        <!-- Revision History Section -->
+        <div class="details-section" style="margin-top: 20px;">
+          <div class="card-header-flex">
+            <h4 class="details-heading">Revision History</h4>
+            <span class="badge badge-neutral" id="concept-history-count">0 Revisions</span>
+          </div>
+          <div class="table-container history-table-wrap">
+            <table class="data-table" id="concept-history-table">
+              <thead>
+                <tr>
+                  <th style="width: 110px;">Date</th>
+                  <th style="width: 90px;">Rev #</th>
+                  <th style="width: 110px;">Status</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="concept-history-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-concept-details-save-notes">Save Notes</button>
+        <button type="button" class="btn btn-primary" id="btn-concept-details-revise-now">Revise Concept Now</button>
       </div>
     </div>
   </div>
