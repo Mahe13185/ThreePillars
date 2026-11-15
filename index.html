@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,11 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 </head>
+
 <body>
   <div class="app-container">
     <!-- Header -->
@@ -58,7 +62,7 @@
 
     <!-- MAIN CONTENT AREA -->
     <main class="main-content">
-      
+
       <!-- ================= SECTION 1: DASHBOARD ================= -->
       <section id="section-dashboard" class="content-section active">
         <!-- 1. Today's Three Pillars Progress -->
@@ -282,7 +286,8 @@
           <div class="tracker-toolbar">
             <div class="search-input-wrap">
               <span class="search-icon">🔍</span>
-              <input type="text" id="dsa-search-input" class="form-control" placeholder="Search problems by name, pattern, or notes...">
+              <input type="text" id="dsa-search-input" class="form-control"
+                placeholder="Search problems by name, pattern, or notes...">
               <button class="btn-clear-search" id="btn-clear-dsa-search" title="Clear search">✕</button>
             </div>
 
@@ -360,7 +365,8 @@
                 <span class="pillar-tag java-tag">Pillar 2</span>
                 <h2 class="card-title">EmbarkX Spring Boot Full Stack Course Tracker</h2>
               </div>
-              <p class="card-desc">72-Day Structured Study Plan across 10 Phases with Spaced Repetition (R1 → R2 → R3 → Well Retained)</p>
+              <p class="card-desc">72-Day Structured Study Plan across 10 Phases with Spaced Repetition (R1 → R2 → R3 →
+                Well Retained)</p>
             </div>
             <div class="course-header-actions">
               <button type="button" class="btn btn-secondary btn-sm" id="btn-course-expand-all">Expand All</button>
@@ -371,7 +377,8 @@
           <div class="tracker-toolbar">
             <div class="search-input-wrap">
               <span class="search-icon">🔍</span>
-              <input type="text" id="course-search-input" class="form-control" placeholder="Search lessons by title, day range, or concepts...">
+              <input type="text" id="course-search-input" class="form-control"
+                placeholder="Search lessons by title, day range, or concepts...">
               <button class="btn-clear-search" id="btn-clear-course-search" title="Clear search">✕</button>
             </div>
 
@@ -582,7 +589,8 @@
                     <span class="pillar-tag dsa-tag">DSA Sheet</span>
                   </div>
                   <div class="pitem-content">
-                    <input type="text" id="input-pillar-dsa-task" class="form-control form-control-sm" placeholder="e.g. Completed Sliding Window 3 problems">
+                    <input type="text" id="input-pillar-dsa-task" class="form-control form-control-sm"
+                      placeholder="e.g. Completed Sliding Window 3 problems">
                   </div>
                 </div>
 
@@ -598,7 +606,8 @@
                   <div class="pitem-content">
                     <div class="pillar-course-status-row">
                       <div class="pillar-course-info">
-                        <span class="pillar-course-label" id="pillar-course-stat-text">0 / 50 Lessons Completed (0%)</span>
+                        <span class="pillar-course-label" id="pillar-course-stat-text">0 / 50 Lessons Completed
+                          (0%)</span>
                         <div class="progress-bar-outer" style="height: 6px; margin: 4px 0 6px;">
                           <div class="progress-bar-inner" id="pillar-course-mini-bar" style="width: 0%;"></div>
                         </div>
@@ -608,7 +617,8 @@
                       </button>
                     </div>
                     <div class="pillar-course-active-lesson-box" id="pillar-course-active-box">
-                      <input type="text" id="input-pillar-java-task" class="form-control form-control-sm" placeholder="e.g. Phase 1: Spring Framework Annotations & Controllers">
+                      <input type="text" id="input-pillar-java-task" class="form-control form-control-sm"
+                        placeholder="e.g. Phase 1: Spring Framework Annotations & Controllers">
                     </div>
                   </div>
                 </div>
@@ -623,7 +633,8 @@
                     <span class="pillar-tag oss-tag">Eclipse SW360</span>
                   </div>
                   <div class="pitem-content">
-                    <input type="text" id="input-pillar-sw360-task" class="form-control form-control-sm" placeholder="e.g. Explored backend REST controllers, issue #241 setup">
+                    <input type="text" id="input-pillar-sw360-task" class="form-control form-control-sm"
+                      placeholder="e.g. Explored backend REST controllers, issue #241 setup">
                   </div>
                 </div>
               </div>
@@ -633,7 +644,8 @@
             <div class="card pillar-reflection-card">
               <h3 class="card-title">Daily Reflection & Key Learnings</h3>
               <p class="card-desc">Write your quick daily recap, roadblocks, or notes (auto-saved)</p>
-              <textarea id="pillar-daily-reflection" class="form-control" rows="4" placeholder="What went well today? What did you struggle with? Any specific algorithmic concept or Spring Boot annotation learned?"></textarea>
+              <textarea id="pillar-daily-reflection" class="form-control" rows="4"
+                placeholder="What went well today? What did you struggle with? Any specific algorithmic concept or Spring Boot annotation learned?"></textarea>
               <div class="reflection-footer">
                 <span class="save-status-text" id="reflection-save-status">Saved</span>
               </div>
@@ -724,7 +736,8 @@
         <div class="form-row form-row-2">
           <div class="form-group">
             <label class="form-label" for="input-prob-name">Problem Name <span class="required">*</span></label>
-            <input type="text" id="input-prob-name" class="form-control" placeholder="e.g. 3Sum, Subarray Sum Equals K" required>
+            <input type="text" id="input-prob-name" class="form-control" placeholder="e.g. 3Sum, Subarray Sum Equals K"
+              required>
           </div>
           <div class="form-group">
             <label class="form-label" for="input-prob-topic">Topic <span class="required">*</span></label>
@@ -803,7 +816,8 @@
 
         <div class="form-group" style="margin-top: 16px;">
           <label class="form-label" for="input-prob-notes">Personal Notes & Key Insights (Optional)</label>
-          <textarea id="input-prob-notes" class="form-control" rows="3" placeholder="Edge cases, tricky base condition, or intuition behind the optimal trick..."></textarea>
+          <textarea id="input-prob-notes" class="form-control" rows="3"
+            placeholder="Edge cases, tricky base condition, or intuition behind the optimal trick..."></textarea>
         </div>
 
         <div class="modal-footer">
@@ -834,7 +848,8 @@
           <span class="badge" id="revise-diff-badge">Medium</span>
           <span class="badge badge-neutral" id="revise-stage-badge">Revision 1</span>
           <span class="badge badge-neutral" id="revise-platform-badge">LeetCode</span>
-          <a href="#" target="_blank" rel="noopener noreferrer" class="link-external" id="revise-link">Open Problem ↗</a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-external" id="revise-link">Open Problem
+            ↗</a>
         </div>
 
         <!-- Problem prompt / question box -->
@@ -842,7 +857,8 @@
           <div class="recall-prompt-header">
             <div>
               <h4 class="recall-prompt-heading">Active Recall Challenge</h4>
-              <p class="recall-prompt-sub">Try to solve or reconstruct the approach, edge cases, and time/space complexity before revealing the saved approaches.</p>
+              <p class="recall-prompt-sub">Try to solve or reconstruct the approach, edge cases, and time/space
+                complexity before revealing the saved approaches.</p>
             </div>
           </div>
 
@@ -904,7 +920,8 @@
             <!-- Optional Revision Note -->
             <div class="form-group" style="margin-top: 16px;">
               <label class="form-label" for="revise-log-note">Revision Note (Optional):</label>
-              <input type="text" id="revise-log-note" class="form-control" placeholder="e.g. Forgot the two pointer condition when nums[i] == nums[i-1]">
+              <input type="text" id="revise-log-note" class="form-control"
+                placeholder="e.g. Forgot the two pointer condition when nums[i] == nums[i-1]">
             </div>
           </div>
         </div>
@@ -953,7 +970,8 @@
         </div>
 
         <div class="details-link-wrap" id="details-link-wrap">
-          <a href="#" target="_blank" rel="noopener noreferrer" class="link-external" id="details-url-link">Open Problem Link ↗</a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-external" id="details-url-link">Open Problem
+            Link ↗</a>
         </div>
 
         <!-- Recorded Approaches -->
@@ -1010,7 +1028,8 @@
         <button class="btn-close-modal" id="btn-close-backup-modal">✕</button>
       </div>
       <div class="modal-body">
-        <p class="modal-lead">All your problem records, approaches, revision history, and Three Pillars logs are securely stored in your browser's LocalStorage.</p>
+        <p class="modal-lead">All your problem records, approaches, revision history, and Three Pillars logs are
+          securely stored in your browser's LocalStorage.</p>
 
         <div class="backup-actions-grid">
           <div class="backup-action-box">
@@ -1065,7 +1084,8 @@
       </div>
       <div class="modal-body">
         <p>Are you sure you want to delete <strong id="delete-problem-name">this problem</strong>?</p>
-        <p class="text-muted" style="font-size: 0.85rem; margin-top: 6px;">This will remove the problem record and its complete revision history.</p>
+        <p class="text-muted" style="font-size: 0.85rem; margin-top: 6px;">This will remove the problem record and its
+          complete revision history.</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-ghost" id="btn-cancel-delete">Cancel</button>
@@ -1106,8 +1126,10 @@
         </div>
 
         <div class="form-group" style="margin-top: 16px;">
-          <label class="form-label" for="concept-revise-log-notes">Revision Reflections & Key Takeaways (Optional):</label>
-          <textarea id="concept-revise-log-notes" class="form-control" rows="3" placeholder="What key concepts did you recall? Any annotations, patterns, or architecture reviewed?"></textarea>
+          <label class="form-label" for="concept-revise-log-notes">Revision Reflections & Key Takeaways
+            (Optional):</label>
+          <textarea id="concept-revise-log-notes" class="form-control" rows="3"
+            placeholder="What key concepts did you recall? Any annotations, patterns, or architecture reviewed?"></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -1162,7 +1184,8 @@
             <h4 class="details-heading">Personal Lesson Notes</h4>
             <span class="save-status-text" id="concept-notes-save-status">Saved</span>
           </div>
-          <textarea id="concept-details-notes-input" class="form-control" rows="3" placeholder="Enter key notes, concepts, commands, or takeaways for this lesson..."></textarea>
+          <textarea id="concept-details-notes-input" class="form-control" rows="3"
+            placeholder="Enter key notes, concepts, commands, or takeaways for this lesson..."></textarea>
         </div>
 
         <!-- Revision History Section -->
@@ -1197,4 +1220,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
